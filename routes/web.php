@@ -1,0 +1,61 @@
+<?php
+
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\SellerController as AdminSellerController;
+use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
+use App\Http\Controllers\Seller\ProductController as SellerProductController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SellerRegistrationController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
+
+// Seller Registration Routes (Public)
+Route::get('/register-seller', [SellerRegistrationController::class, 'create'])->name('seller.register.form');
+Route::post('/register-seller', [SellerRegistrationController::class, 'store'])->name('seller.register');
+Route::get('/register-seller/success', [SellerRegistrationController::class, 'success'])->name('seller.registration.success');
+
+// Admin Routes
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    
+    // Seller Management
+    Route::get('/sellers', [AdminSellerController::class, 'index'])->name('sellers.index');
+    Route::get('/sellers/{seller}', [AdminSellerController::class, 'show'])->name('sellers.show');
+    Route::post('/sellers/{seller}/approve', [AdminSellerController::class, 'approve'])->name('sellers.approve');
+    Route::post('/sellers/{seller}/reject', [AdminSellerController::class, 'reject'])->name('sellers.reject');
+    Route::post('/sellers/{seller}/suspend', [AdminSellerController::class, 'suspend'])->name('sellers.suspend');
+    Route::post('/sellers/{seller}/activate', [AdminSellerController::class, 'activate'])->name('sellers.activate');
+});
+
+// Seller Routes
+Route::middleware(['auth', 'role:seller'])->prefix('seller')->name('seller.')->group(function () {
+    Route::get('/dashboard', [SellerDashboardController::class, 'index'])->name('dashboard');
+    
+    // Product Management
+    Route::resource('products', SellerProductController::class);
+});
+
+// Auth Routes (fallback dashboard)
+Route::get('/dashboard', function () {
+    $user = Auth::user();
+    
+    if ($user->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    } elseif ($user->isSeller()) {
+        return redirect()->route('seller.dashboard');
+    }
+    
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
