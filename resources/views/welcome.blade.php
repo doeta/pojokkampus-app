@@ -42,6 +42,9 @@
                     <!-- Navigation -->
                     @if (Route::has('login'))
                         <nav class="flex items-center gap-4">
+                            <a href="{{ route('catalog.index') }}" class="px-5 py-2.5 text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
+                                Katalog Produk
+                            </a>
                             @auth
                                 <a href="{{ url('/dashboard') }}" class="px-5 py-2.5 text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">
                                     Dashboard

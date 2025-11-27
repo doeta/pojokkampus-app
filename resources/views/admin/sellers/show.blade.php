@@ -95,13 +95,13 @@
                 @if($seller->seller->file_ktp_pic)
                 <div>
                     <p class="text-sm text-gray-600 mb-2">File KTP</p>
-                    <a href="{{ Storage::url($seller->seller->file_ktp_pic) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors">
+                    <button onclick="showKTPModal()" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded-lg transition-colors font-medium">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                         </svg>
                         Lihat File KTP
-                    </a>
+                    </button>
                 </div>
                 @endif
             </div>
@@ -189,6 +189,63 @@
     </div>
 </div>
 
+<!-- KTP Preview Modal -->
+@if($seller->seller && $seller->seller->file_ktp_pic)
+<div id="ktpModal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" onclick="hideKTPModal()">
+    <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden" onclick="event.stopPropagation()">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between p-4 border-b border-gray-200">
+            <h3 class="text-xl font-bold text-gray-900">Preview File KTP</h3>
+            <div class="flex gap-2">
+                <a href="{{ Storage::url($seller->seller->file_ktp_pic) }}" download class="px-4 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded-lg font-medium transition-colors inline-flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Download
+                </a>
+                <button onclick="hideKTPModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Modal Content -->
+        <div class="p-4 overflow-auto max-h-[calc(90vh-80px)]">
+            @php
+                $fileExtension = strtolower(pathinfo($seller->seller->file_ktp_pic, PATHINFO_EXTENSION));
+                $fileUrl = Storage::url($seller->seller->file_ktp_pic);
+            @endphp
+            
+            @if(in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif', 'webp']))
+                <!-- Image Preview -->
+                <div class="flex justify-center">
+                    <img src="{{ $fileUrl }}" alt="KTP Preview" class="max-w-full h-auto rounded-lg shadow-lg">
+                </div>
+            @elseif($fileExtension === 'pdf')
+                <!-- PDF Preview -->
+                <iframe src="{{ $fileUrl }}" class="w-full h-[70vh] rounded-lg border border-gray-300"></iframe>
+            @else
+                <!-- Unsupported File Type -->
+                <div class="text-center py-12">
+                    <svg class="w-20 h-20 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                    <p class="text-gray-600 mb-4">Preview tidak tersedia untuk tipe file ini</p>
+                    <a href="{{ $fileUrl }}" download class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        Download File
+                    </a>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+@endif
+
 <!-- Reject Modal -->
 <div id="rejectModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
@@ -220,6 +277,16 @@
 </div>
 
 <script>
+function showKTPModal() {
+    document.getElementById('ktpModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Prevent body scroll
+}
+
+function hideKTPModal() {
+    document.getElementById('ktpModal').classList.add('hidden');
+    document.body.style.overflow = 'auto'; // Restore body scroll
+}
+
 function showRejectModal() {
     document.getElementById('rejectModal').classList.remove('hidden');
 }
@@ -227,5 +294,13 @@ function showRejectModal() {
 function hideRejectModal() {
     document.getElementById('rejectModal').classList.add('hidden');
 }
+
+// Close modal with ESC key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        hideKTPModal();
+        hideRejectModal();
+    }
+});
 </script>
 @endsection

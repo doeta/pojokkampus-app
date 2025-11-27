@@ -14,8 +14,8 @@ return new class extends Migration
     {
         // Step 1: Add temporary columns
         Schema::table('users', function (Blueprint $table) {
-            $table->string('role_temp')->nullable()->after('role');
-            $table->string('status_temp')->nullable()->after('status');
+            $table->string('role_temp')->default('buyer')->after('role');
+            $table->string('status_temp')->default('active')->after('status');
         });
         
         // Step 2: Copy data with mapping
@@ -43,9 +43,12 @@ return new class extends Migration
             $table->renameColumn('status_temp', 'status');
         });
         
-        // Step 5: Modify to ENUM
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'seller', 'buyer') DEFAULT 'buyer'");
-        DB::statement("ALTER TABLE users MODIFY COLUMN status ENUM('active', 'pending', 'suspended') DEFAULT 'active'");
+        // Step 5: Modify to ENUM when supported (e.g. MySQL). SQLite used in tests cannot run MODIFY.
+        $driver = Schema::getConnection()->getDriverName();
+        if ($driver !== 'sqlite') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'seller', 'buyer') DEFAULT 'buyer'");
+            DB::statement("ALTER TABLE users MODIFY COLUMN status ENUM('active', 'pending', 'suspended') DEFAULT 'active'");
+        }
     }
 
     /**
@@ -53,8 +56,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert back to original enum values
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('platform', 'seller') DEFAULT 'seller'");
-        DB::statement("ALTER TABLE users MODIFY COLUMN status ENUM('active', 'inactive', 'pending') DEFAULT 'pending'");
+        $driver = Schema::getConnection()->getDriverName();
+        if ($driver !== 'sqlite') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('platform', 'seller') DEFAULT 'seller'");
+            DB::statement("ALTER TABLE users MODIFY COLUMN status ENUM('active', 'inactive', 'pending') DEFAULT 'pending'");
+        }
     }
 };

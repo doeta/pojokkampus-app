@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\SellerController as AdminSellerController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
 use App\Http\Controllers\Seller\ProductController as SellerProductController;
+use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellerRegistrationController;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,11 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
+
+// Public Catalog Routes
+Route::get('/products', [CatalogController::class, 'index'])->name('catalog.index');
+Route::get('/p/{category:slug}', [CatalogController::class, 'indexByCategory'])->name('catalog.category');
+Route::get('/products/{product:slug}', [CatalogController::class, 'show'])->name('catalog.show');
 
 // Seller Registration Routes (Public)
 Route::get('/register-seller', [SellerRegistrationController::class, 'create'])->name('seller.register.form');
@@ -42,6 +48,10 @@ Route::middleware(['auth', 'role:seller'])->prefix('seller')->name('seller.')->g
 // Auth Routes (fallback dashboard)
 Route::get('/dashboard', function () {
     $user = Auth::user();
+
+    if (! $user) {
+        return redirect()->route('welcome');
+    }
     
     if ($user->isAdmin()) {
         return redirect()->route('admin.dashboard');

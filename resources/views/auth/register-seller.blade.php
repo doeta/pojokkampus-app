@@ -328,5 +328,270 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Real-time validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            
+            // Validation rules
+            const validationRules = {
+                name: {
+                    pattern: /^[a-zA-Z\s]+$/,
+                    minLength: 3,
+                    message: 'Nama hanya boleh berisi huruf dan spasi (minimal 3 karakter)'
+                },
+                email: {
+                    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Format email tidak valid'
+                },
+                password: {
+                    minLength: 8,
+                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                    message: 'Password minimal 8 karakter, harus mengandung huruf besar, huruf kecil, angka, dan simbol'
+                },
+                nama_toko: {
+                    pattern: /^[a-zA-Z0-9\s\-\.]+$/,
+                    minLength: 3,
+                    message: 'Nama toko hanya boleh berisi huruf, angka, spasi, strip, dan titik (minimal 3 karakter)'
+                },
+                nama_pic: {
+                    pattern: /^[a-zA-Z\s]+$/,
+                    minLength: 3,
+                    message: 'Nama PIC hanya boleh berisi huruf dan spasi (minimal 3 karakter)'
+                },
+                no_ktp_pic: {
+                    pattern: /^[0-9]{16}$/,
+                    message: 'Nomor KTP harus 16 digit angka'
+                },
+                email_pic: {
+                    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Format email tidak valid'
+                },
+                alamat: {
+                    minLength: 10,
+                    message: 'Alamat minimal 10 karakter'
+                },
+                alamat_ktp_pic: {
+                    minLength: 10,
+                    message: 'Alamat minimal 10 karakter'
+                },
+                nama_kelurahan: {
+                    pattern: /^[a-zA-Z\s]+$/,
+                    minLength: 3,
+                    message: 'Kelurahan hanya boleh berisi huruf dan spasi (minimal 3 karakter)'
+                },
+                kecamatan: {
+                    pattern: /^[a-zA-Z\s]+$/,
+                    minLength: 3,
+                    message: 'Kecamatan hanya boleh berisi huruf dan spasi (minimal 3 karakter)'
+                },
+                kabupaten_kota: {
+                    pattern: /^[a-zA-Z\s]+$/,
+                    minLength: 3,
+                    message: 'Kabupaten/Kota hanya boleh berisi huruf dan spasi (minimal 3 karakter)'
+                },
+                provinsi: {
+                    pattern: /^[a-zA-Z\s]+$/,
+                    minLength: 3,
+                    message: 'Provinsi hanya boleh berisi huruf dan spasi (minimal 3 karakter)'
+                },
+                file_ktp_pic: {
+                    fileTypes: ['image/jpeg', 'image/png', 'application/pdf'],
+                    maxSize: 2 * 1024 * 1024, // 2MB
+                    message: 'File harus JPG, PNG, atau PDF dengan ukuran maksimal 2MB'
+                }
+            };
+
+            // Function to show error
+            function showError(input, message) {
+                removeError(input);
+                
+                input.classList.add('border-red-500', 'focus:ring-red-500', 'focus:border-red-500');
+                input.classList.remove('border-gray-300', 'focus:ring-indigo-500', 'focus:border-indigo-500');
+                
+                const errorDiv = document.createElement('p');
+                errorDiv.className = 'mt-2 text-sm text-red-600 error-message';
+                errorDiv.textContent = message;
+                input.parentElement.appendChild(errorDiv);
+            }
+
+            // Function to remove error
+            function removeError(input) {
+                input.classList.remove('border-red-500', 'focus:ring-red-500', 'focus:border-red-500');
+                input.classList.add('border-gray-300', 'focus:ring-indigo-500', 'focus:border-indigo-500');
+                
+                const existingError = input.parentElement.querySelector('.error-message');
+                if (existingError) {
+                    existingError.remove();
+                }
+            }
+
+            // Function to show success
+            function showSuccess(input) {
+                removeError(input);
+                input.classList.add('border-green-500');
+                input.classList.remove('border-red-500');
+            }
+
+            // Validate field
+            function validateField(input) {
+                const name = input.name;
+                const value = input.value.trim();
+                const rule = validationRules[name];
+
+                if (!rule) return true;
+
+                // Check if field is required and empty
+                if (input.required && !value) {
+                    showError(input, 'Field ini wajib diisi');
+                    return false;
+                }
+
+                // Skip validation if field is empty and not required
+                if (!value && !input.required) {
+                    removeError(input);
+                    return true;
+                }
+
+                // Check minimum length
+                if (rule.minLength && value.length < rule.minLength) {
+                    showError(input, rule.message);
+                    return false;
+                }
+
+                // Check pattern
+                if (rule.pattern && !rule.pattern.test(value)) {
+                    showError(input, rule.message);
+                    return false;
+                }
+
+                // File validation
+                if (name === 'file_ktp_pic' && input.files.length > 0) {
+                    const file = input.files[0];
+                    
+                    if (!rule.fileTypes.includes(file.type)) {
+                        showError(input, 'Format file tidak valid. Gunakan JPG, PNG, atau PDF');
+                        return false;
+                    }
+                    
+                    if (file.size > rule.maxSize) {
+                        showError(input, 'Ukuran file maksimal 2MB');
+                        return false;
+                    }
+                }
+
+                showSuccess(input);
+                return true;
+            }
+
+            // Validate password confirmation
+            function validatePasswordConfirmation() {
+                const password = document.getElementById('password');
+                const confirmation = document.getElementById('password_confirmation');
+                
+                if (confirmation.value && password.value !== confirmation.value) {
+                    showError(confirmation, 'Password tidak sama');
+                    return false;
+                } else if (confirmation.value) {
+                    showSuccess(confirmation);
+                }
+                return true;
+            }
+
+            // Validate email PIC different from account email
+            function validateEmailPIC() {
+                const email = document.getElementById('email');
+                const emailPIC = document.getElementById('email_pic');
+                
+                if (emailPIC.value && email.value === emailPIC.value) {
+                    showError(emailPIC, 'Email PIC harus berbeda dengan email akun');
+                    return false;
+                } else if (emailPIC.value && validateField(emailPIC)) {
+                    showSuccess(emailPIC);
+                }
+                return true;
+            }
+
+            // Add real-time validation to all inputs
+            const inputs = form.querySelectorAll('input:not([type="submit"]), textarea');
+            
+            inputs.forEach(input => {
+                // Validate on blur
+                input.addEventListener('blur', function() {
+                    validateField(this);
+                    
+                    if (this.id === 'password_confirmation') {
+                        validatePasswordConfirmation();
+                    }
+                    
+                    if (this.id === 'email_pic') {
+                        validateEmailPIC();
+                    }
+                });
+
+                // Validate on input (for real-time feedback)
+                input.addEventListener('input', function() {
+                    // Remove error as user types
+                    if (this.value.trim()) {
+                        const existingError = this.parentElement.querySelector('.error-message');
+                        if (existingError) {
+                            validateField(this);
+                        }
+                    }
+                    
+                    if (this.id === 'password_confirmation') {
+                        validatePasswordConfirmation();
+                    }
+                    
+                    if (this.id === 'email_pic') {
+                        validateEmailPIC();
+                    }
+                });
+
+                // Special validation for no_ktp_pic (only allow numbers)
+                if (input.id === 'no_ktp_pic') {
+                    input.addEventListener('keypress', function(e) {
+                        if (!/[0-9]/.test(e.key)) {
+                            e.preventDefault();
+                        }
+                    });
+                }
+            });
+
+            // Validate form before submit
+            form.addEventListener('submit', function(e) {
+                let isValid = true;
+
+                inputs.forEach(input => {
+                    if (!validateField(input)) {
+                        isValid = false;
+                    }
+                });
+
+                if (!validatePasswordConfirmation()) {
+                    isValid = false;
+                }
+
+                if (!validateEmailPIC()) {
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    e.preventDefault();
+                    
+                    // Scroll to first error
+                    const firstError = form.querySelector('.border-red-500');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        firstError.focus();
+                    }
+                    
+                    // Show alert
+                    alert('Mohon perbaiki field yang tidak valid sebelum submit');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

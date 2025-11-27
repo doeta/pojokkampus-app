@@ -13,9 +13,14 @@ class Product extends Model
         'category_id',
         'name',
         'slug',
+        'sku',
+        'brand',
         'description',
         'price',
+        'weight',
+        'condition',
         'stock',
+        'min_order',
         'image',
         'images',
         'status',
@@ -36,6 +41,12 @@ class Product extends Model
         return $this->belongsTo(User::class);
     }
 
+    // Alias for user (seller)
+    public function seller(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
@@ -44,6 +55,21 @@ class Product extends Model
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
+
+    public function totalReviews()
+    {
+        return $this->reviews()->count();
     }
 
     public function incrementViews(): void
@@ -55,5 +81,10 @@ class Product extends Model
     {
         $this->decrement('stock', $quantity);
         $this->increment('sold', $quantity);
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 }
