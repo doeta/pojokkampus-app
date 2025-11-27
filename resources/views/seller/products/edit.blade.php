@@ -194,7 +194,7 @@
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Foto Tambahan</label>
                     @if($product->images)
                         <div class="mb-3 grid grid-cols-5 gap-2">
-                            @foreach(json_decode($product->images) as $img)
+                            @foreach($product->images as $img)
                                 <img src="{{ Storage::url($img) }}" class="w-full h-20 object-cover rounded-lg border" alt="Additional">
                             @endforeach
                         </div>

@@ -18,7 +18,7 @@
                 
                 @if($product->images)
                     <div class="grid grid-cols-3 gap-2">
-                        @foreach(json_decode($product->images) as $img)
+                        @foreach($product->images as $img)
                             <img src="{{ Storage::url($img) }}" 
                                 class="w-full h-20 object-cover rounded-lg border cursor-pointer hover:opacity-80"
                                 onclick="document.querySelector('.col-span-1 img').src = this.src"
