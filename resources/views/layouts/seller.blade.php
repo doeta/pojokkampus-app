@@ -16,17 +16,9 @@
         <!-- Sidebar -->
         <aside class="w-64 bg-white border-r border-gray-200">
             <div class="p-6 border-b border-gray-200">
-                <div class="flex items-center gap-3">
-                    <div class="bg-indigo-600 w-10 h-10 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="font-bold text-gray-900">{{ auth()->user()->seller->nama_toko ?? 'Toko Saya' }}</h2>
-                        <p class="text-xs text-gray-500">Seller Panel</p>
-                    </div>
-                </div>
+                <a href="{{ route('welcome') }}" class="flex items-center justify-center">
+                    <img src="{{ asset('images/logo.png') }}" alt="PojokKampus Logo" class="h-20 w-auto max-w-full">
+                </a>
             </div>
 
             <nav class="p-4">

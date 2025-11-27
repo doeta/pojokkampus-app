@@ -11,7 +11,9 @@
     <header class="bg-white border-b sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
-                <a href="{{ url('/') }}" class="text-2xl font-bold text-indigo-600 hover:text-indigo-700">PojokKampus</a>
+                <a href="{{ url('/') }}" class="flex items-center">
+                    <img src="{{ asset('images/logo.png') }}" alt="PojokKampus Logo" class="h-16 w-auto">
+                </a>
                 
                 <!-- Search Bar -->
                 <form method="GET" class="flex-1 max-w-2xl mx-8">

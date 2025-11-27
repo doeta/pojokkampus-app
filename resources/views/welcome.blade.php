@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'PojokKampus') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -23,21 +23,11 @@
         <!-- Clean Header -->
         <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center py-4">
+                <div class="flex justify-between items-center py-3">
                     <!-- Logo & Brand -->
-                    <div class="flex items-center space-x-3">
-                        <div class="bg-indigo-600 p-2 rounded-lg">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h1 class="text-2xl font-bold text-gray-900">
-                                PojokKampus
-                            </h1>
-                            <p class="text-xs text-gray-500">Marketplace Terpercaya</p>
-                        </div>
-                    </div>
+                    <a href="{{ url('/') }}" class="flex items-center">
+                        <img src="{{ asset('images/logo.png') }}" alt="PojokKampus Logo" class="h-12 w-auto">
+                    </a>
 
                     <!-- Navigation -->
                     @if (Route::has('login'))
