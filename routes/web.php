@@ -7,6 +7,7 @@ use App\Http\Controllers\Seller\ProductController as SellerProductController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellerRegistrationController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,6 +36,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/sellers/{seller}/reject', [AdminSellerController::class, 'reject'])->name('sellers.reject');
     Route::post('/sellers/{seller}/suspend', [AdminSellerController::class, 'suspend'])->name('sellers.suspend');
     Route::post('/sellers/{seller}/activate', [AdminSellerController::class, 'activate'])->name('sellers.activate');
+
+    // Admin Reports
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/seller-accounts', [ReportController::class, 'sellerAccounts'])->name('seller-accounts');
+        Route::get('/sellers-by-province', [ReportController::class, 'sellersByProvince'])->name('sellers-by-province');
+        Route::get('/products-by-rating', [ReportController::class, 'productsByRating'])->name('products-by-rating');
+    });
 });
 
 // Seller Routes
@@ -43,6 +51,13 @@ Route::middleware(['auth', 'role:seller'])->prefix('seller')->name('seller.')->g
     
     // Product Management
     Route::resource('products', SellerProductController::class);
+
+    // Seller Reports
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/stock', [ReportController::class, 'sellerStock'])->name('stock');
+        Route::get('/stock-by-rating', [ReportController::class, 'sellerStockByRating'])->name('stock-by-rating');
+        Route::get('/urgent-stock', [ReportController::class, 'urgentStock'])->name('urgent-stock');
+    });
 });
 
 // Auth Routes (fallback dashboard)
