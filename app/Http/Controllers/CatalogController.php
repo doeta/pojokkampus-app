@@ -16,10 +16,10 @@ class CatalogController extends Controller
 
         // Search
         if ($search = $request->input('search')) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('brand', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('brand', 'like', "%{$search}%");
             });
         }
 
@@ -30,20 +30,20 @@ class CatalogController extends Controller
 
         // Filter by seller/store
         if ($storeSearch = $request->input('store')) {
-            $query->whereHas('user', function($q) use ($storeSearch) {
+            $query->whereHas('user', function ($q) use ($storeSearch) {
                 $q->where('name', 'like', "%{$storeSearch}%");
             });
         }
 
         // Filter by location (jika ada seller profile terpisah)
         if ($province = $request->input('province')) {
-            $query->whereHas('user.seller', function($q) use ($province) {
+            $query->whereHas('user.seller', function ($q) use ($province) {
                 $q->where('province', 'like', "%{$province}%");
             });
         }
 
         if ($city = $request->input('city')) {
-            $query->whereHas('user.seller', function($q) use ($city) {
+            $query->whereHas('user.seller', function ($q) use ($city) {
                 $q->where('city', 'like', "%{$city}%");
             });
         }
@@ -100,8 +100,9 @@ class CatalogController extends Controller
 
     public function show(Product $product)
     {
-        $product->load(['category', 'user.seller', 'reviews.user']);
-        
+        // SRS-06: Reviews are from guests, no user relation
+        $product->load(['category', 'user.seller', 'reviews']);
+
         // Only show active products with stock
         if ($product->status !== 'active' || $product->stock <= 0) {
             abort(404);

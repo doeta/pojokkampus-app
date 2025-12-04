@@ -102,8 +102,9 @@ class ProductController extends Controller
         if ($product->user_id !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
-        
-        $product->load('category', 'reviews.user');
+
+        // SRS-06: Reviews are from guests, no user relation
+        $product->load('category', 'reviews');
         return view('seller.products.show', compact('product'));
     }
 
@@ -113,7 +114,7 @@ class ProductController extends Controller
         if ($product->user_id !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
-        
+
         $categories = Category::where('is_active', true)->get();
         return view('seller.products.edit', compact('product', 'categories'));
     }
