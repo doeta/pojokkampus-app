@@ -1,98 +1,303 @@
-lu jual gwe beli
+# PojokKampus Marketplace
+
+Platform marketplace untuk mahasiswa menjual dan membeli produk second dan new. Dibangun dengan Laravel 12 dan Tailwind CSS.
+
+## Daftar Isi
+
+-   [Fitur Utama](#fitur-utama)
+-   [Tech Stack](#tech-stack)
+-   [Requirements](#requirements)
+-   [Installation](#installation)
+-   [Seeding Data](#seeding-data)
+-   [Account Testing](#account-testing)
+-   [Troubleshooting](#troubleshooting)
+-   [Project Structure](#project-structure)
+-   [SRS Compliance](#srs-compliance)
+
+## Fitur Utama
+
+### Untuk Penjual (Seller)
+
+-   Registrasi dan verifikasi email (SRS-01, 02)
+-   Upload produk dengan gambar (SRS-03)
+-   Dashboard penjual dengan statistik dan charts (SRS-08)
+-   Kelola produk (CRUD operations)
+-   Laporan PDF (SRS-09-14)
+
+### Untuk Pembeli dan Pengunjung
+
+-   Katalog produk publik (SRS-04)
+-   Pencarian dan filter produk (SRS-05)
+-   Review dan rating tanpa login (SRS-06)
+-   Notifikasi email otomatis
+
+### Untuk Admin
+
+-   Verifikasi akun penjual
+-   Dashboard admin dengan analytics (SRS-07)
+-   Generate berbagai laporan PDF
+-   Kelola kategori produk
+
+## Tech Stack
+
+-   Backend: Laravel 12.37.0 (PHP 8.2)
+-   Frontend: Blade Templates + Tailwind CSS + Alpine.js
+-   Database: MySQL
+-   Package Manager: Composer + NPM
+-   PDF Generator: DomPDF
+-   Charts: Chart.js
 
 ## Requirements
 
--   PHP >= 8.2
--   Composer
--   Node.js & NPM
+Pastikan sistem Anda sudah terinstall:
+
+-   PHP >= 8.2 dengan extensions:
+    -   OpenSSL
+    -   PDO
+    -   Mbstring
+    -   Tokenizer
+    -   XML
+    -   Ctype
+    -   JSON
+    -   BCMath
+    -   Fileinfo
+    -   GD
+-   Composer 2.x
+-   Node.js >= 18.x dan NPM
+-   MySQL >= 8.0 atau MariaDB >= 10.3
 -   Git
 
-## langkah2
+## Installation
 
-1. **Clone repository**
-
-    ```bash
-    git clone https://github.com/doeta/Tubes-PPL.git
-    cd Tubes-PPL
-    ```
-
-2. **Install PHP dependencies**
-
-    ```bash
-    composer install
-    ```
-
-3. **Copy environment file**
-
-    ```bash
-    cp .env.example .env
-    ```
-
-4. **Setup database**
-
-    - Buat database baru (misal: `tubes_ppl`)
-    - Edit file `.env` dan sesuaikan konfigurasi database:
-
-    ```env
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=tubes_ppl
-    DB_USERNAME=akar
-    DB_PASSWORD=rajangoding
-    ```
-
-5. **Generate application key**
-
-    ```bash
-    php artisan key:generate
-    ```
-
-6. **Run migrations**
-
-    ```bash
-    php artisan migrate
-    ```
-
-7. **Seed database (optional)**
-
-    ```bash
-    php artisan db:seed
-    ```
-
-8. **Install NPM dependencies**
-
-    ```bash
-    npm install
-    ```
-
-9. **Build assets**
-
-    ```bash
-    npm run build
-    ```
-
-10. **Create storage link (jika ada upload file)**
-
-    ```bash
-    php artisan storage:link
-    ```
-
-11. **Run development server**
-
-    ```bash
-    php artisan serve
-    ```
-
-12. **Access application**
-    - Open browser: http://127.0.0.1:8000
-
-Jika ingin menggunakan hot reload untuk CSS/JS:
+### 1. Clone Repository
 
 ```bash
-# Terminal 1
-php artisan serve
+git clone https://github.com/doeta/Tubes-PPL.git
+cd Tubes-PPL
+```
 
-# Terminal 2
+### 2. Install Dependencies
+
+```bash
+composer install
+npm install
+```
+
+### 3. Environment Setup
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+### 4. Database Configuration
+
+Buat database baru di MySQL:
+
+```sql
+CREATE DATABASE pojok_kampus CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+Edit file `.env` dan sesuaikan konfigurasi database:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=pojok_kampus
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
+
+Untuk email notifications, konfigurasi MAIL_MAILER (opsional):
+
+```env
+MAIL_MAILER=log
+```
+
+### 5. Run Migration and Link Storage
+
+```bash
+php artisan migrate
+php artisan storage:link
+```
+
+### 6. Build Frontend Assets
+
+```bash
+npm run build
+```
+
+Untuk development dengan hot-reload:
+
+```bash
 npm run dev
 ```
+
+### 7. Start Application
+
+```bash
+php artisan serve
+```
+
+Akses aplikasi di: http://127.0.0.1:8000
+
+## Seeding Data
+
+Untuk testing, Anda bisa mengisi database dengan data dummy:
+
+### Option 1: Seed Semua Data
+
+```bash
+php artisan db:seed --class=CategorySeeder
+php artisan db:seed --class=AdminSeeder
+php artisan db:seed --class=TestSellerSeeder
+php artisan db:seed --class=ProductWithImagesSeeder
+php artisan db:seed --class=ReviewSeeder
+```
+
+### Option 2: Reset dan Seed Fresh
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+Seeder akan membuat:
+
+-   10 kategori produk
+-   1 akun admin
+-   1 akun seller dengan toko
+-   50 produk dengan gambar
+-   162 reviews dengan ratings
+
+## Account Testing
+
+Setelah seeding, gunakan akun berikut:
+
+### Admin Account
+
+-   Email: admin@admin.com
+-   Password: admin123
+-   Akses: Dashboard admin, verifikasi seller, laporan PDF
+
+### Test Seller Account
+
+-   Email: seller@test.com
+-   Password: seller123
+-   Akses: Dashboard penjual, kelola produk, lihat statistik
+
+### Register Seller Baru
+
+Buat akun seller baru melalui: http://localhost:8000/register-seller
+
+## Troubleshooting
+
+### Error: No application encryption key has been specified
+
+```bash
+php artisan key:generate
+```
+
+### Error: Storage link sudah ada
+
+```bash
+rm public/storage
+php artisan storage:link
+```
+
+### Error: Migration failed
+
+```bash
+php artisan migrate:fresh
+```
+
+### Error: Permission denied (Linux/Mac)
+
+```bash
+chmod -R 775 storage bootstrap/cache
+chown -R $USER:www-data storage bootstrap/cache
+```
+
+### Assets tidak muncul / CSS tidak apply
+
+```bash
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+npm run build
+```
+
+### PHP PDO MySQL Extension not installed
+
+Windows (enable in php.ini):
+
+```
+extension=pdo_mysql
+```
+
+Ubuntu/Debian:
+
+```bash
+sudo apt-get install php8.2-mysql
+```
+
+macOS:
+
+```bash
+brew install php@8.2
+```
+
+## Project Structure
+
+```
+├── app/
+│   ├── Http/Controllers/     # Controllers
+│   ├── Models/               # Eloquent Models
+│   ├── Mail/                 # Email templates
+│   └── Notifications/        # Email notifications
+├── database/
+│   ├── migrations/           # Database migrations
+│   └── seeders/              # Database seeders
+├── public/
+│   ├── images/               # Static images
+│   ├── js/                   # Custom JavaScript
+│   └── storage/              # Symlink ke storage/app/public
+├── resources/
+│   ├── views/                # Blade templates
+│   └── css/                  # Tailwind CSS
+├── routes/
+│   └── web.php               # Web routes
+└── storage/
+    └── app/public/
+        ├── product-images/   # Product images
+        └── ktp-files/        # KTP verification files
+```
+
+## SRS Compliance
+
+Semua 14 requirement dari Software Requirements Specification telah diimplementasikan:
+
+| Requirement | Feature                   | Status   |
+| ----------- | ------------------------- | -------- |
+| SRS-01      | Registrasi Penjual        | Complete |
+| SRS-02      | Verifikasi Email          | Complete |
+| SRS-03      | Upload Produk             | Complete |
+| SRS-04      | Katalog Publik            | Complete |
+| SRS-05      | Pencarian Produk          | Complete |
+| SRS-06      | Review dan Rating (Guest) | Complete |
+| SRS-07      | Dashboard Admin           | Complete |
+| SRS-08      | Dashboard Penjual         | Complete |
+| SRS-09      | Laporan Akun Penjual      | Complete |
+| SRS-10      | Laporan Sebaran Toko      | Complete |
+| SRS-11      | Laporan Produk Rating     | Complete |
+| SRS-12      | Laporan Stok Tertinggi    | Complete |
+| SRS-13      | Laporan Rating Tertinggi  | Complete |
+| SRS-14      | Laporan Stok Menipis      | Complete |
+
+## License
+
+Proyek untuk tujuan pendidikan (Tugas Besar PPL).
+
+## Tim
+
+Team PPL 10 - Rekayasa Perangkat Lunak, Universitas Indonesia
