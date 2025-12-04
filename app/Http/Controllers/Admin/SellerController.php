@@ -21,6 +21,39 @@ class SellerController extends Controller
         return view('admin.sellers.index', compact('sellers'));
     }
 
+    /**
+     * Display pending sellers awaiting verification
+     * SRS-MartPlace-02
+     */
+    public function pending()
+    {
+        $sellers = User::where('role', 'seller')
+            ->where('status', 'pending')
+            ->with('seller')
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.sellers.pending', compact('sellers'));
+    }
+
+    /**
+     * Display verified sellers (approved/rejected history)
+     * SRS-MartPlace-02
+     */
+    public function verified()
+    {
+        $sellers = User::where('role', 'seller')
+            ->whereIn('status', ['active', 'suspended'])
+            ->whereHas('seller', function($query) {
+                $query->whereIn('verification_status', ['approved', 'rejected']);
+            })
+            ->with('seller.verifier')
+            ->latest('updated_at')
+            ->paginate(20);
+
+        return view('admin.sellers.verified', compact('sellers'));
+    }
+
     public function show(User $seller)
     {
         $seller->load('seller', 'products');
