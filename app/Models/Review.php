@@ -7,9 +7,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Review extends Model
 {
+    /**
+     * SRS-MartPlace-06: Review dapat diberikan oleh pengunjung tanpa login
+     * Data yang disimpan: nama, nomor HP, email, rating (1-5), komentar
+     */
     protected $fillable = [
         'product_id',
-        'user_id',
+        'name',
+        'phone',
+        'email',
         'rating',
         'comment',
     ];
@@ -21,10 +27,5 @@ class Review extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 }
