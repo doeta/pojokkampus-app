@@ -180,10 +180,7 @@
 
                     <!-- Hero Image/Slider -->
                     <div class="relative lg:h-[500px] w-full reveal delay-200">
-                        <div class="absolute -top-10 -right-10 w-24 h-24 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float"></div>
-                        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float-delayed"></div>
-
-                        <div class="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white/50 backdrop-blur-sm transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                        <div class="relative w-full h-full rounded-xl overflow-hidden shadow-lg border border-gray-200">
                             <div id="heroSlider" class="relative w-full h-full bg-gray-100">
                                 <div class="slider-item absolute inset-0 transition-opacity duration-700 opacity-100">
                                     <img src="{{ asset('images/slider/slide1.jpg') }}" class="w-full h-full object-cover" alt="Slide 1">

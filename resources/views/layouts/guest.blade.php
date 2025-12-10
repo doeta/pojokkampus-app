@@ -51,7 +51,7 @@
 
                 <!-- Content Card -->
                 <div class="w-full max-w-md">
-                    <div class="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
+                    <div class="bg-white shadow-xl rounded-2xl p-8 border-[12px] border-white">
                         {{ $slot }}
                     </div>
                 </div>

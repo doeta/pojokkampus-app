@@ -112,8 +112,6 @@
                                 <span class="text-gray-400 font-normal">({{ $product->totalReviews() }} Ulasan)</span>
                             </div>
                             <span class="text-gray-300">|</span>
-                            <span class="text-gray-600">Terjual <span class="font-semibold text-gray-900">{{ $product->sold ?? 0 }}</span></span>
-                            <span class="text-gray-300">|</span>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $product->status == 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                 {{ $product->status == 'active' ? 'Tersedia' : 'Habis' }}
                             </span>
@@ -184,17 +182,6 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="mt-auto flex flex-col sm:flex-row gap-3">
-                        <button class="flex-1 px-6 py-4 bg-white border-2 border-indigo-600 text-indigo-600 rounded-xl font-bold hover:bg-indigo-50 transition-colors flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                            Tambah Keranjang
-                        </button>
-                        <button class="flex-1 px-6 py-4 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all transform active:scale-95 flex items-center justify-center gap-2">
-                            Beli Sekarang
-                        </button>
                     </div>
                 </div>
             </div>
