@@ -38,13 +38,13 @@ class CatalogController extends Controller
         // Filter by location (jika ada seller profile terpisah)
         if ($province = $request->input('province')) {
             $query->whereHas('user.seller', function ($q) use ($province) {
-                $q->where('province', 'like', "%{$province}%");
+                $q->where('provinsi', $province);
             });
         }
 
         if ($city = $request->input('city')) {
             $query->whereHas('user.seller', function ($q) use ($city) {
-                $q->where('city', 'like', "%{$city}%");
+                $q->where('kabupaten_kota', $city);
             });
         }
 
@@ -67,7 +67,20 @@ class CatalogController extends Controller
         $products = $query->paginate(20);
         $categories = Category::where('is_active', true)->get();
 
-        return view('catalog.index', compact('products', 'categories'));
+        // Get unique provinces and cities from sellers
+        $provinces = \App\Models\Seller::whereNotNull('provinsi')
+            ->distinct()
+            ->pluck('provinsi')
+            ->sort()
+            ->values();
+
+        $cities = \App\Models\Seller::whereNotNull('kabupaten_kota')
+            ->distinct()
+            ->pluck('kabupaten_kota')
+            ->sort()
+            ->values();
+
+        return view('catalog.index', compact('products', 'categories', 'provinces', 'cities'));
     }
 
     public function indexByCategory(Category $category)
