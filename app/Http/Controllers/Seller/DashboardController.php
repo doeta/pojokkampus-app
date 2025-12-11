@@ -66,17 +66,23 @@ class DashboardController extends Controller
             ];
         })->sortByDesc('rating')->take(10)->values();
 
-        // Chart 3: Review Distribution per Product (SRS-MartPlace-08 & SRS-06)
-        // Grafik Jumlah Review per Produk (karena review sekarang dari guest tanpa user_id)
+        // Chart 3: Store Rating Distribution (SRS-MartPlace-08)
+        // Grafik Sebaran Rating Toko (Bintang 1-5)
         $productIds = $products->pluck('id');
-        $ratingsByProvince = DB::table('reviews')
-            ->whereIn('reviews.product_id', $productIds)
-            ->join('products', 'reviews.product_id', '=', 'products.id')
-            ->select('products.name', DB::raw('COUNT(*) as total'), DB::raw('AVG(reviews.rating) as avg_rating'))
-            ->groupBy('products.id', 'products.name')
-            ->orderBy('total', 'desc')
-            ->take(10)
+
+        $rawRatingDist = DB::table('reviews')
+            ->whereIn('product_id', $productIds)
+            ->select('rating', DB::raw('COUNT(*) as total'))
+            ->groupBy('rating')
             ->get();
+
+        $storeRatingDistribution = collect([5, 4, 3, 2, 1])->map(function ($rating) use ($rawRatingDist) {
+            $found = $rawRatingDist->firstWhere('rating', $rating);
+            return [
+                'rating' => $rating,
+                'total' => $found ? $found->total : 0
+            ];
+        });
 
         return view('seller.dashboard', compact(
             'stats',
@@ -84,7 +90,7 @@ class DashboardController extends Controller
             'recent_orders',
             'stockByProduct',
             'ratingByProduct',
-            'ratingsByProvince'
+            'storeRatingDistribution'
         ));
     }
 }

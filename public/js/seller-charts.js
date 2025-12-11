@@ -6,17 +6,17 @@ function initSellerCharts(chartData) {
     }
 
     // Chart Colors (Purple theme for seller)
-    const colors = [
-        "#9333ea",
-        "#a855f7",
-        "#c084fc",
-        "#d8b4fe",
-        "#e9d5ff",
-        "#6366f1",
-        "#818cf8",
-        "#a5b4fc",
-        "#c7d2fe",
-        "#e0e7ff",
+    const multiColors = [
+        "rgba(147, 51, 234, 0.7)", // Purple
+        "rgba(59, 130, 246, 0.7)", // Blue
+        "rgba(16, 185, 129, 0.7)", // Green
+        "rgba(245, 158, 11, 0.7)", // Yellow
+        "rgba(239, 68, 68, 0.7)", // Red
+        "rgba(236, 72, 153, 0.7)", // Pink
+        "rgba(99, 102, 241, 0.7)", // Indigo
+        "rgba(20, 184, 166, 0.7)", // Teal
+        "rgba(249, 115, 22, 0.7)", // Orange
+        "rgba(107, 114, 128, 0.7)", // Gray
     ];
 
     // 1. Stock Distribution per Product Chart
@@ -30,9 +30,11 @@ function initSellerCharts(chartData) {
                     {
                         label: "Stok Tersedia",
                         data: chartData.stockProductValues,
-                        backgroundColor: colors[0],
-                        borderColor: colors[1],
-                        borderWidth: 1,
+                        backgroundColor: "rgba(147, 51, 234, 0.2)",
+                        borderColor: "rgba(147, 51, 234, 1)",
+                        borderWidth: 2,
+                        borderRadius: 4,
+                        barPercentage: 0.6,
                     },
                 ],
             },
@@ -43,16 +45,36 @@ function initSellerCharts(chartData) {
                     legend: {
                         display: false,
                     },
-                    title: {
-                        display: true,
-                        text: "Top 10 Produk dengan Stok Terbanyak",
+                    tooltip: {
+                        backgroundColor: "rgba(255, 255, 255, 0.9)",
+                        titleColor: "#1f2937",
+                        bodyColor: "#4b5563",
+                        borderColor: "#e5e7eb",
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false,
                     },
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
+                        grid: {
+                            color: "#f3f4f6",
+                        },
                         ticks: {
-                            stepSize: 1,
+                            font: {
+                                size: 11,
+                            },
+                        },
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                        },
+                        ticks: {
+                            font: {
+                                size: 11,
+                            },
                         },
                     },
                 },
@@ -71,9 +93,11 @@ function initSellerCharts(chartData) {
                     {
                         label: "Rating Rata-rata",
                         data: chartData.ratingProductValues,
-                        backgroundColor: colors[5],
-                        borderColor: colors[6],
-                        borderWidth: 1,
+                        backgroundColor: "rgba(245, 158, 11, 0.2)",
+                        borderColor: "rgba(245, 158, 11, 1)",
+                        borderWidth: 2,
+                        borderRadius: 4,
+                        barPercentage: 0.6,
                     },
                 ],
             },
@@ -85,17 +109,27 @@ function initSellerCharts(chartData) {
                     legend: {
                         display: false,
                     },
-                    title: {
-                        display: true,
-                        text: "Top 10 Produk dengan Rating Tertinggi",
+                    tooltip: {
+                        backgroundColor: "rgba(255, 255, 255, 0.9)",
+                        titleColor: "#1f2937",
+                        bodyColor: "#4b5563",
+                        borderColor: "#e5e7eb",
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false,
                     },
                 },
                 scales: {
                     x: {
                         beginAtZero: true,
                         max: 5,
-                        ticks: {
-                            stepSize: 0.5,
+                        grid: {
+                            color: "#f3f4f6",
+                        },
+                    },
+                    y: {
+                        grid: {
+                            display: false,
                         },
                     },
                 },
@@ -103,43 +137,75 @@ function initSellerCharts(chartData) {
         });
     }
 
-    // 3. Review Distribution per Product Chart (SRS-06)
-    const ratingsByProvinceCtx = document.getElementById(
-        "ratingsByProvinceChart"
-    );
-    if (ratingsByProvinceCtx) {
-        new Chart(ratingsByProvinceCtx.getContext("2d"), {
+    // 3. Store Rating Distribution Chart (SRS-MartPlace-08)
+    const storeRatingCtx = document.getElementById("storeRatingChart");
+    if (storeRatingCtx) {
+        new Chart(storeRatingCtx.getContext("2d"), {
             type: "bar",
             data: {
-                labels: chartData.reviewProductNames,
+                labels: chartData.storeRatingLabels.map((l) => l + " Bintang"),
                 datasets: [
                     {
                         label: "Jumlah Review",
-                        data: chartData.reviewProductValues,
-                        backgroundColor: colors[0],
-                        borderColor: colors[1],
+                        data: chartData.storeRatingValues,
+                        backgroundColor: [
+                            "rgba(16, 185, 129, 0.7)", // 5 Stars - Green
+                            "rgba(132, 204, 22, 0.7)", // 4 Stars - Lime
+                            "rgba(250, 204, 21, 0.7)", // 3 Stars - Yellow
+                            "rgba(249, 115, 22, 0.7)", // 2 Stars - Orange
+                            "rgba(239, 68, 68, 0.7)", // 1 Star - Red
+                        ],
+                        borderColor: [
+                            "rgba(16, 185, 129, 1)",
+                            "rgba(132, 204, 22, 1)",
+                            "rgba(250, 204, 21, 1)",
+                            "rgba(249, 115, 22, 1)",
+                            "rgba(239, 68, 68, 1)",
+                        ],
                         borderWidth: 1,
+                        borderRadius: 4,
+                        barPercentage: 0.6,
                     },
                 ],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                indexAxis: "y",
                 plugins: {
                     legend: {
                         display: false,
                     },
-                    title: {
-                        display: true,
-                        text: "Produk dengan Review Terbanyak",
+                    tooltip: {
+                        backgroundColor: "rgba(255, 255, 255, 0.9)",
+                        titleColor: "#1f2937",
+                        bodyColor: "#4b5563",
+                        borderColor: "#e5e7eb",
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false,
                     },
                 },
                 scales: {
-                    x: {
+                    y: {
                         beginAtZero: true,
+                        grid: {
+                            color: "#f3f4f6",
+                        },
                         ticks: {
                             stepSize: 1,
+                            font: {
+                                size: 11,
+                            },
+                        },
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                        },
+                        ticks: {
+                            font: {
+                                size: 11,
+                            },
                         },
                     },
                 },
@@ -170,11 +236,11 @@ function loadSellerChartDataFromDOM() {
             ratingProductValues: JSON.parse(
                 dataElement.dataset.ratingProductValues || "[]"
             ),
-            reviewProductNames: JSON.parse(
-                dataElement.dataset.reviewProductNames || "[]"
+            storeRatingLabels: JSON.parse(
+                dataElement.dataset.storeRatingLabels || "[]"
             ),
-            reviewProductValues: JSON.parse(
-                dataElement.dataset.reviewProductValues || "[]"
+            storeRatingValues: JSON.parse(
+                dataElement.dataset.storeRatingValues || "[]"
             ),
         };
 

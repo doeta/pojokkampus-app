@@ -20,12 +20,13 @@ class ReportController extends Controller
         $products = Product::where('user_id', $seller->id)
             ->with(['category', 'reviews'])
             ->orderBy('stock', 'desc')
-            ->get()
-            ->map(function ($product) {
-                $product->avg_rating = $product->reviews()->avg('rating') ?? 0;
-                $product->total_reviews = $product->reviews()->count();
-                return $product;
-            });
+            ->paginate(10);
+
+        $products->getCollection()->transform(function ($product) {
+            $product->avg_rating = $product->reviews()->avg('rating') ?? 0;
+            $product->total_reviews = $product->reviews()->count();
+            return $product;
+        });
 
         return view('seller.reports.stock', compact('products'));
     }
@@ -44,7 +45,7 @@ class ReportController extends Controller
             });
 
         $pdf = Pdf::loadView('seller.reports.pdf.stock', compact('products'));
-        $pdf->setPaper('a4', 'landscape');
+        $pdf->setPaper('a4', 'portrait');
         return $pdf->download('laporan-stok-produk-' . now()->format('Y-m-d') . '.pdf');
     }
 
@@ -58,14 +59,15 @@ class ReportController extends Controller
         $seller = Auth::user();
         $products = Product::where('user_id', $seller->id)
             ->with(['category', 'reviews'])
-            ->get()
-            ->map(function ($product) {
-                $product->avg_rating = $product->reviews()->avg('rating') ?? 0;
-                $product->total_reviews = $product->reviews()->count();
-                return $product;
-            })
-            ->sortByDesc('avg_rating')
-            ->values();
+            ->withAvg('reviews', 'rating')
+            ->orderByDesc('reviews_avg_rating')
+            ->paginate(10);
+
+        $products->getCollection()->transform(function ($product) {
+            $product->avg_rating = $product->reviews_avg_rating ?? 0;
+            $product->total_reviews = $product->reviews()->count();
+            return $product;
+        });
 
         return view('seller.reports.performance', compact('products'));
     }
@@ -85,7 +87,7 @@ class ReportController extends Controller
             ->values();
 
         $pdf = Pdf::loadView('seller.reports.pdf.performance', compact('products'));
-        $pdf->setPaper('a4', 'landscape');
+        $pdf->setPaper('a4', 'portrait');
         return $pdf->download('laporan-rating-produk-' . now()->format('Y-m-d') . '.pdf');
     }
 
@@ -104,12 +106,13 @@ class ReportController extends Controller
             ->select('products.*')
             ->orderBy('categories.name', 'asc')
             ->orderBy('products.name', 'asc')
-            ->get()
-            ->map(function ($product) {
-                $product->avg_rating = $product->reviews()->avg('rating') ?? 0;
-                $product->total_reviews = $product->reviews()->count();
-                return $product;
-            });
+            ->paginate(10);
+
+        $products->getCollection()->transform(function ($product) {
+            $product->avg_rating = $product->reviews()->avg('rating') ?? 0;
+            $product->total_reviews = $product->reviews()->count();
+            return $product;
+        });
 
         return view('seller.reports.restock', compact('products'));
     }
@@ -132,7 +135,7 @@ class ReportController extends Controller
             });
 
         $pdf = Pdf::loadView('seller.reports.pdf.restock', compact('products'));
-        $pdf->setPaper('a4', 'landscape');
+        $pdf->setPaper('a4', 'portrait');
         return $pdf->download('laporan-restock-produk-' . now()->format('Y-m-d') . '.pdf');
     }
 }

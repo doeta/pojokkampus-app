@@ -2,280 +2,112 @@
 
 @section('content')
 <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">Dashboard Penjual</h1>
-    <p class="text-gray-600 mt-1">Kelola toko dan produk Anda</p>
+    <h1 class="text-2xl font-bold text-gray-800">Dashboard Penjual</h1>
+    <p class="text-gray-500 mt-1">Ringkasan performa toko dan statistik penjualan</p>
 </div>
 
 <!-- Stats Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
     <!-- Total Products -->
-    <div class="bg-white rounded-lg border border-gray-200 p-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-sm text-gray-600">Total Produk</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($stats['total_products']) }}</p>
-            </div>
-            <div class="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center">
+    <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <div class="bg-purple-100 p-3 rounded-lg">
                 <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                 </svg>
             </div>
+            <span class="text-xs font-medium text-purple-600 bg-purple-50 px-2 py-1 rounded-full">{{ $stats['active_products'] }} Aktif</span>
         </div>
-        <div class="mt-4">
-            <span class="text-sm text-green-600 font-medium">{{ $stats['active_products'] }} Produk Aktif</span>
-        </div>
-    </div>
-
-    <!-- Total Orders -->
-    <div class="bg-white rounded-lg border border-gray-200 p-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-sm text-gray-600">Total Pesanan</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($stats['total_orders']) }}</p>
-            </div>
-            <div class="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                </svg>
-            </div>
-        </div>
-        <div class="mt-4">
-            <span class="text-sm text-yellow-600 font-medium">{{ $stats['pending_orders'] }} Pending</span>
-        </div>
-    </div>
-
-    <!-- Total Revenue -->
-    <div class="bg-white rounded-lg border border-gray-200 p-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-sm text-gray-600">Total Pendapatan</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">Rp {{ number_format($stats['total_revenue'], 0, ',', '.') }}</p>
-            </div>
-            <div class="bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-            </div>
-        </div>
-        <div class="mt-4">
-            <span class="text-sm text-gray-500">Dari {{ $stats['total_products'] }} Produk</span>
-        </div>
+        <p class="text-sm text-gray-500 font-medium">Total Produk</p>
+        <h3 class="text-2xl font-bold text-gray-800 mt-1">{{ number_format($stats['total_products']) }}</h3>
     </div>
 
     <!-- Total Stock -->
-    <div class="bg-white rounded-lg border border-gray-200 p-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-sm text-gray-600">Total Stok</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($stats['total_stock']) }}</p>
-            </div>
-            <div class="bg-cyan-100 w-12 h-12 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+    <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <div class="bg-orange-100 p-3 rounded-lg">
+                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
                 </svg>
             </div>
-        </div>
-        <div class="mt-4">
             @if($stats['low_stock'] > 0)
-            <span class="text-sm text-red-600 font-medium">{{ $stats['low_stock'] }} Produk Butuh Restock</span>
+                <span class="text-xs font-medium text-red-600 bg-red-50 px-2 py-1 rounded-full">{{ $stats['low_stock'] }} Menipis</span>
             @else
-            <span class="text-sm text-green-600 font-medium">Stok Aman</span>
+                <span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">Stok Aman</span>
             @endif
         </div>
-    </div>
-
-    <!-- Out of Stock -->
-    <div class="bg-white rounded-lg border border-gray-200 p-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-sm text-gray-600">Habis Stok</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ $stats['out_of_stock'] }}</p>
-            </div>
-            <div class="bg-red-100 w-12 h-12 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                </svg>
-            </div>
-        </div>
-        <div class="mt-4">
-            @if($stats['out_of_stock'] > 0)
-            <a href="{{ route('seller.reports.restock') }}" class="text-sm text-red-600 hover:text-red-700 font-medium">Lihat Laporan →</a>
-            @else
-            <span class="text-sm text-gray-500">Tidak ada produk kosong</span>
-            @endif
-        </div>
-    </div>
-</div>
-
-<!-- Reports Section -->
-<div class="mb-8">
-    <h2 class="text-lg font-bold text-gray-900 mb-4">Laporan Toko</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- SRS-12 -->
-        <a href="{{ route('seller.reports.stock') }}" class="block bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-center mb-4">
-                <div class="bg-purple-100 p-3 rounded-full mr-4">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-900">Laporan Stok Produk</h3>
-            </div>
-            <p class="text-sm text-gray-600">Daftar produk diurutkan dari stok terbanyak.</p>
-            <div class="mt-4 text-purple-600 text-sm font-medium">Lihat Laporan →</div>
-        </a>
-
-        <!-- SRS-13 -->
-        <a href="{{ route('seller.reports.performance') }}" class="block bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-center mb-4">
-                <div class="bg-yellow-100 p-3 rounded-full mr-4">
-                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-900">Laporan Performa</h3>
-            </div>
-            <p class="text-sm text-gray-600">Daftar produk berdasarkan rating tertinggi.</p>
-            <div class="mt-4 text-yellow-600 text-sm font-medium">Lihat Laporan →</div>
-        </a>
-
-        <!-- SRS-14 -->
-        <a href="{{ route('seller.reports.restock') }}" class="block bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-center mb-4">
-                <div class="bg-red-100 p-3 rounded-full mr-4">
-                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-900">Laporan Restock</h3>
-            </div>
-            <p class="text-sm text-gray-600">Daftar produk dengan stok menipis (< 2).</p>
-            <div class="mt-4 text-red-600 text-sm font-medium">Lihat Laporan →</div>
-        </a>
+        <p class="text-sm text-gray-500 font-medium">Total Stok Unit</p>
+        <h3 class="text-2xl font-bold text-gray-800 mt-1">{{ number_format($stats['total_stock']) }}</h3>
     </div>
 </div>
 
 <!-- Charts Section (SRS-MartPlace-08) -->
-<div class="mt-8">
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">Grafik & Statistik Toko</h2>
-    
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <!-- Stock Distribution Chart -->
-        <div class="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Sebaran Stok per Produk</h3>
-            <canvas id="stockByProductChart" style="max-height: 300px;"></canvas>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Stock Distribution Chart -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Sebaran Stok Produk</h3>
+        <div class="relative h-80">
+            <canvas id="stockByProductChart"></canvas>
         </div>
+    </div>
 
-        <!-- Rating Distribution Chart -->
-        <div class="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Sebaran Rating per Produk</h3>
-            <canvas id="ratingByProductChart" style="max-height: 300px;"></canvas>
+    <!-- Rating Distribution Chart -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Performa Rating Produk</h3>
+        <div class="relative h-80">
+            <canvas id="ratingByProductChart"></canvas>
         </div>
+    </div>
 
-        <!-- Review Distribution per Product (SRS-06) -->
-        <div class="bg-white rounded-lg border border-gray-200 p-6 lg:col-span-2">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Distribusi Review per Produk</h3>
-            <div style="max-height: 400px; display: flex; justify-content: center;">
-                <canvas id="ratingsByProvinceChart"></canvas>
-            </div>
+    <!-- Store Rating Distribution Chart -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm lg:col-span-2">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Sebaran Rating Toko (Bintang 1-5)</h3>
+        <div class="relative h-80">
+            <canvas id="storeRatingChart"></canvas>
         </div>
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Recent Activity Section -->
+<div class="mb-8">
     <!-- Recent Products -->
-    <div class="bg-white rounded-lg border border-gray-200">
-        <div class="p-6 border-b border-gray-200">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-bold text-gray-900">Produk Terbaru</h2>
-                <a href="{{ route('seller.products.index') }}" class="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
-                    Lihat Semua →
-                </a>
-            </div>
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col">
+        <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+            <h2 class="text-lg font-bold text-gray-800">Produk Terbaru</h2>
+            <a href="{{ route('seller.products.index') }}" class="text-sm text-purple-600 hover:text-purple-700 font-medium">Lihat Semua</a>
         </div>
-        <div class="divide-y divide-gray-200">
+        <div class="flex-1 overflow-auto">
             @forelse($recent_products as $product)
-            <div class="p-4 hover:bg-gray-50 transition-colors">
-                <div class="flex gap-4">
-                    <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-16 h-16 rounded-lg object-cover">
-                    <div class="flex-1">
-                        <p class="font-medium text-gray-900">{{ $product->name }}</p>
-                        <p class="text-sm text-gray-600 mt-1">{{ $product->category->name ?? 'No Category' }}</p>
-                        <div class="flex items-center gap-4 mt-2">
-                            <span class="text-sm font-medium text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
-                            <span class="text-xs text-gray-500">Stock: {{ $product->stock }}</span>
-                            @if($product->status === 'active')
-                                <span class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">Active</span>
-                            @else
-                                <span class="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded-full">{{ ucfirst($product->status) }}</span>
-                            @endif
-                        </div>
+            <div class="p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 flex gap-4">
+                @if($product->image)
+                    <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="w-12 h-12 rounded-lg object-cover bg-gray-100">
+                @else
+                    <div class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center border border-gray-200">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                @endif
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-medium text-gray-900 truncate">{{ $product->name }}</h4>
+                    <p class="text-xs text-gray-500 mt-0.5">{{ $product->category->name ?? 'Uncategorized' }}</p>
+                    <div class="flex items-center gap-2 mt-1.5">
+                        <span class="text-xs font-semibold text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                        <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">Stok: {{ $product->stock }}</span>
                     </div>
                 </div>
             </div>
             @empty
-            <div class="p-8 text-center text-gray-500">
-                <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                </svg>
-                <p class="mb-4">Belum ada produk</p>
-                <a href="{{ route('seller.products.create') }}" class="inline-block px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors">
-                    Tambah Produk Pertama
-                </a>
+            <div class="p-8 text-center">
+                <p class="text-gray-500 text-sm">Belum ada produk ditambahkan.</p>
             </div>
             @endforelse
         </div>
-    </div>
-
-    <!-- Recent Orders -->
-    <div class="bg-white rounded-lg border border-gray-200">
-        <div class="p-6 border-b border-gray-200">
-            <h2 class="text-lg font-bold text-gray-900">Pesanan Terbaru</h2>
+        <div class="p-4 border-t border-gray-100 bg-gray-50 rounded-b-xl">
+            <a href="{{ route('seller.products.create') }}" class="block w-full py-2 px-4 bg-white border border-gray-300 rounded-lg text-center text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-purple-600 transition-colors">
+                + Tambah Produk Baru
+            </a>
         </div>
-        <div class="divide-y divide-gray-200">
-            @forelse($recent_orders as $order)
-            <div class="p-4 hover:bg-gray-50 transition-colors">
-                <div class="flex items-center justify-between mb-2">
-                    <p class="font-medium text-gray-900">{{ $order->order_number }}</p>
-                    @if($order->status === 'pending')
-                        <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-full">Pending</span>
-                    @elseif($order->status === 'processing')
-                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">Processing</span>
-                    @elseif($order->status === 'shipped')
-                        <span class="inline-block px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">Shipped</span>
-                    @elseif($order->status === 'delivered')
-                        <span class="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">Delivered</span>
-                    @else
-                        <span class="inline-block px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Cancelled</span>
-                    @endif
-                </div>
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-600">{{ $order->product->name ?? 'Produk Dihapus' }}</p>
-                        <p class="text-xs text-gray-500 mt-1">{{ $order->user->name }} • {{ $order->created_at->diffForHumans() }}</p>
-                    </div>
-                    <p class="font-bold text-gray-900">Rp {{ number_format($order->total, 0, ',', '.') }}</p>
-                </div>
-            </div>
-            @empty
-            <div class="p-8 text-center text-gray-500">
-                Belum ada pesanan
-            </div>
-            @endforelse
-        </div>
-    </div>
-</div>
-
-<!-- Quick Actions -->
-<div class="mt-6 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg p-6 text-white">
-    <div class="flex items-center justify-between">
-        <div>
-            <h3 class="text-xl font-bold mb-2">Mulai Berjualan!</h3>
-            <p class="text-purple-100">Tambahkan produk baru dan raih lebih banyak pembeli</p>
-        </div>
-        <a href="{{ route('seller.products.create') }}" class="px-6 py-3 bg-white text-purple-600 rounded-lg font-bold hover:bg-gray-100 transition-colors">
-            + Tambah Produk
-        </a>
     </div>
 </div>
 
@@ -285,8 +117,8 @@
      data-stock-product-values="{{ json_encode($stockByProduct->pluck('stock')) }}"
      data-rating-product-names="{{ json_encode($ratingByProduct->pluck('name')) }}"
      data-rating-product-values="{{ json_encode($ratingByProduct->pluck('rating')) }}"
-     data-review-product-names="{{ json_encode($ratingsByProvince->pluck('name')) }}"
-     data-review-product-values="{{ json_encode($ratingsByProvince->pluck('total')) }}">
+     data-store-rating-labels="{{ json_encode($storeRatingDistribution->pluck('rating')) }}"
+     data-store-rating-values="{{ json_encode($storeRatingDistribution->pluck('total')) }}">
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
