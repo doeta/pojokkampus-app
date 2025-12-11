@@ -136,7 +136,6 @@
 <body>
     <div class="header">
         <h1>Format Laporan Bagian Penjual (toko)</h1>
-        <h2>(SRS-MartPlace-12)</h2>
         <h3>Laporan Daftar Produk Berdasarkan Stock</h3>
         <p>Tanggal dibuat: {{ now()->format('d-m-Y') }} oleh {{ auth()->user()->name }}</p>
     </div>
@@ -145,11 +144,11 @@
         <thead>
             <tr>
                 <th style="width: 5%;">No</th>
-                <th style="width: 30%;">Produk</th>
+                <th style="width: 30%;">Nama Produk</th>
+                <th class="center" style="width: 15%;">Stok</th>
+                <th class="center" style="width: 15%;">Rating</th>
                 <th style="width: 20%;">Kategori</th>
                 <th class="right" style="width: 15%;">Harga</th>
-                <th class="center" style="width: 15%;">Rating</th>
-                <th class="center" style="width: 15%;">Stock</th>
             </tr>
         </thead>
         <tbody>
@@ -157,16 +156,16 @@
             <tr>
                 <td class="center">{{ $index + 1 }}</td>
                 <td>{{ $product->name }}</td>
-                <td>{{ $product->category->name ?? 'Tanpa Kategori' }}</td>
-                <td class="right">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                <td class="center rating">
-                    ★ {{ number_format($product->avg_rating, 2) }}
-                </td>
                 <td class="center">
                     <span class="{{ $product->stock == 0 ? 'stock-low' : ($product->stock < 10 ? 'stock-medium' : 'stock-high') }}">
                         {{ $product->stock }}
                     </span>
                 </td>
+                <td class="center rating">
+                    ★ {{ number_format($product->avg_rating, 2) }}
+                </td>
+                <td>{{ $product->category->name ?? 'Tanpa Kategori' }}</td>
+                <td class="right">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
             </tr>
             @empty
             <tr>

@@ -107,6 +107,54 @@
     </div>
 </div>
 
+<!-- Reports Section -->
+<div class="mb-8">
+    <h2 class="text-lg font-bold text-gray-900 mb-4">Laporan Toko</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- SRS-12 -->
+        <a href="{{ route('seller.reports.stock') }}" class="block bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div class="flex items-center mb-4">
+                <div class="bg-purple-100 p-3 rounded-full mr-4">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900">Laporan Stok Produk</h3>
+            </div>
+            <p class="text-sm text-gray-600">Daftar produk diurutkan dari stok terbanyak.</p>
+            <div class="mt-4 text-purple-600 text-sm font-medium">Lihat Laporan →</div>
+        </a>
+
+        <!-- SRS-13 -->
+        <a href="{{ route('seller.reports.performance') }}" class="block bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div class="flex items-center mb-4">
+                <div class="bg-yellow-100 p-3 rounded-full mr-4">
+                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900">Laporan Performa</h3>
+            </div>
+            <p class="text-sm text-gray-600">Daftar produk berdasarkan rating tertinggi.</p>
+            <div class="mt-4 text-yellow-600 text-sm font-medium">Lihat Laporan →</div>
+        </a>
+
+        <!-- SRS-14 -->
+        <a href="{{ route('seller.reports.restock') }}" class="block bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div class="flex items-center mb-4">
+                <div class="bg-red-100 p-3 rounded-full mr-4">
+                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900">Laporan Restock</h3>
+            </div>
+            <p class="text-sm text-gray-600">Daftar produk dengan stok menipis (< 2).</p>
+            <div class="mt-4 text-red-600 text-sm font-medium">Lihat Laporan →</div>
+        </a>
+    </div>
+</div>
+
 <!-- Charts Section (SRS-MartPlace-08) -->
 <div class="mt-8">
     <h2 class="text-2xl font-bold text-gray-900 mb-6">Grafik & Statistik Toko</h2>

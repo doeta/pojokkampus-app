@@ -165,7 +165,6 @@
 <body>
     <div class="header">
         <h1>Format Laporan Bagian Penjual (toko)</h1>
-        <h2>(SRS-MartPlace-13)</h2>
         <h3>Laporan Daftar Produk Berdasarkan Rating</h3>
         <p>Tanggal dibuat: {{ now()->format('d-m-Y') }} oleh {{ auth()->user()->name }}</p>
     </div>
@@ -174,11 +173,11 @@
         <thead>
             <tr>
                 <th style="width: 5%;">No</th>
-                <th style="width: 30%;">Produk</th>
+                <th style="width: 30%;">Nama Produk</th>
+                <th class="center" style="width: 15%;">Rating</th>
+                <th class="center" style="width: 15%;">Stok</th>
                 <th style="width: 20%;">Kategori</th>
                 <th class="right" style="width: 15%;">Harga</th>
-                <th class="center" style="width: 15%;">Stock</th>
-                <th class="center" style="width: 15%;">Rating</th>
             </tr>
         </thead>
         <tbody>
@@ -186,14 +185,14 @@
             <tr>
                 <td class="center">{{ $index + 1 }}</td>
                 <td>{{ $product->name }}</td>
-                <td>{{ $product->category->name ?? 'Tanpa Kategori' }}</td>
-                <td class="right">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                <td class="center">{{ $product->stock }}</td>
                 <td class="center">
                     <span class="{{ $product->avg_rating >= 4.5 ? 'rating-excellent' : ($product->avg_rating >= 4 ? 'rating-good' : ($product->avg_rating >= 3 ? 'rating-average' : 'rating-poor')) }}">
                         {{ number_format($product->avg_rating, 2) }}
                     </span>
                 </td>
+                <td class="center">{{ $product->stock }}</td>
+                <td>{{ $product->category->name ?? 'Tanpa Kategori' }}</td>
+                <td class="right">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
             </tr>
             @empty
             <tr>

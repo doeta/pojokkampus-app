@@ -182,7 +182,6 @@
 <body>
     <div class="header">
         <h1>Format Laporan Bagian Penjual (toko)</h1>
-        <h2>(SRS-MartPlace-14)</h2>
         <h3>Laporan Daftar Produk Segera Dipesan</h3>
         <p>Tanggal dibuat: {{ now()->format('d-m-Y') }} oleh {{ auth()->user()->name }}</p>
     </div>
@@ -191,10 +190,11 @@
         <thead>
             <tr>
                 <th style="width: 5%;">No</th>
-                <th style="width: 35%;">Produk</th>
-                <th style="width: 25%;">Kategori</th>
-                <th class="right" style="width: 20%;">Harga</th>
-                <th class="center" style="width: 15%;">Stock</th>
+                <th style="width: 30%;">Nama Produk</th>
+                <th class="center" style="width: 15%;">Stok</th>
+                <th class="center" style="width: 15%;">Rating</th>
+                <th style="width: 20%;">Kategori</th>
+                <th class="right" style="width: 15%;">Harga</th>
             </tr>
         </thead>
         <tbody>
@@ -202,17 +202,20 @@
             <tr class="{{ $product->stock == 0 ? 'stock-zero' : '' }}">
                 <td class="center">{{ $index + 1 }}</td>
                 <td>{{ $product->name }}</td>
-                <td>{{ $product->category->name ?? 'Tanpa Kategori' }}</td>
-                <td class="right">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                 <td class="center">
                     <span class="stock-value {{ $product->stock == 0 ? 'stock-zero-value' : 'stock-critical-value' }}">
                         {{ $product->stock }}
                     </span>
                 </td>
+                <td class="center rating">
+                    ★ {{ number_format($product->avg_rating, 2) }}
+                </td>
+                <td>{{ $product->category->name ?? 'Tanpa Kategori' }}</td>
+                <td class="right">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
             </tr>
             @empty
             <tr>
-                <td colspan="7" class="center" style="padding: 20px; color: #059669; background: #d1fae5;">
+                <td colspan="6" class="center" style="padding: 20px; color: #059669; background: #d1fae5;">
                     ✓ Tidak ada produk yang membutuhkan restock. Semua stok dalam kondisi aman.
                 </td>
             </tr>

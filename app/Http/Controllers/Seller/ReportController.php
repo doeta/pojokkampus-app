@@ -10,52 +10,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class ReportController extends Controller
 {
     /**
-     * SRS-MartPlace-11: Laporan Produk Berdasarkan Rating (Semua Produk)
-     * Menampilkan daftar semua produk dari semua penjual, diurutkan berdasarkan rating tertinggi
-     * Kolom: No, Nama Produk, Kategori, Harga, Rating, Nama Toko, Propinsi
-     */
-    public function rating()
-    {
-        $products = Product::with(['seller.seller', 'category', 'reviews'])
-            ->whereHas('reviews')
-            ->get()
-            ->map(function ($product) {
-                return [
-                    'product' => $product,
-                    'avg_rating' => $product->reviews()->avg('rating') ?? 0,
-                    'total_reviews' => $product->reviews()->count(),
-                    'seller_name' => $product->seller->seller->nama_toko ?? '-',
-                    'province' => $product->seller->seller->provinsi ?? '-',
-                ];
-            })
-            ->sortByDesc('avg_rating')
-            ->values();
-
-        return view('seller.reports.rating', compact('products'));
-    }
-
-    public function ratingPdf()
-    {
-        $products = Product::with(['seller.seller', 'category', 'reviews'])
-            ->whereHas('reviews')
-            ->get()
-            ->map(function ($product) {
-                return [
-                    'product' => $product,
-                    'avg_rating' => $product->reviews()->avg('rating') ?? 0,
-                    'total_reviews' => $product->reviews()->count(),
-                    'seller_name' => $product->seller->seller->nama_toko ?? '-',
-                    'province' => $product->seller->seller->provinsi ?? '-',
-                ];
-            })
-            ->sortByDesc('avg_rating')
-            ->values();
-
-        $pdf = Pdf::loadView('seller.reports.pdf.rating', compact('products'));
-        return $pdf->download('laporan-produk-berdasarkan-rating-' . now()->format('Y-m-d') . '.pdf');
-    }
-
-    /**
      * SRS-MartPlace-12: Laporan Stok (Urut Stok Tertinggi)
      * Menampilkan daftar produk diurutkan dari stok terbanyak ke terkecil
      * Kolom: Nama Produk, Stok, Rating, Kategori, Harga
@@ -90,6 +44,7 @@ class ReportController extends Controller
             });
 
         $pdf = Pdf::loadView('seller.reports.pdf.stock', compact('products'));
+        $pdf->setPaper('a4', 'landscape');
         return $pdf->download('laporan-stok-produk-' . now()->format('Y-m-d') . '.pdf');
     }
 
@@ -130,6 +85,7 @@ class ReportController extends Controller
             ->values();
 
         $pdf = Pdf::loadView('seller.reports.pdf.performance', compact('products'));
+        $pdf->setPaper('a4', 'landscape');
         return $pdf->download('laporan-rating-produk-' . now()->format('Y-m-d') . '.pdf');
     }
 
@@ -176,6 +132,7 @@ class ReportController extends Controller
             });
 
         $pdf = Pdf::loadView('seller.reports.pdf.restock', compact('products'));
+        $pdf->setPaper('a4', 'landscape');
         return $pdf->download('laporan-restock-produk-' . now()->format('Y-m-d') . '.pdf');
     }
 }

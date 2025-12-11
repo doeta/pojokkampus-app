@@ -18,7 +18,7 @@ class PlatformUserSeeder extends Seeder
             'name' => 'Platform Admin',
             'email' => 'admin@marketplace.com',
             'password' => Hash::make('password'),
-            'role' => 'platform',
+            'role' => 'admin',
             'status' => 'active',
             'email_verified_at' => now(),
         ]);

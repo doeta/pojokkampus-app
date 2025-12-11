@@ -1,129 +1,126 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="mb-8 flex items-center justify-between">
-    <div>
-        <h1 class="text-3xl font-bold text-gray-900">Laporan Status Akun Penjual</h1>
-        <p class="text-gray-600 mt-1">Daftar penjual berdasarkan status (Aktif & Tidak Aktif) - SRS-MartPlace-09</p>
-    </div>
-    <a href="{{ route('admin.reports.seller-accounts.pdf') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-        </svg>
-        Download PDF
-    </a>
-</div>
-
-<!-- Active Sellers -->
-<div class="bg-white rounded-lg border border-gray-200 mb-8">
-    <div class="p-6 border-b border-gray-200 bg-green-50">
-        <div class="flex items-center gap-3">
-            <div class="bg-green-600 w-12 h-12 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+<div class="space-y-4">
+    <!-- Header & Stats -->
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Laporan Status Akun</h1>
+            <p class="text-sm text-gray-500">Monitoring status keaktifan penjual</p>
+        </div>
+        
+        <!-- Compact Stats -->
+        <div class="flex gap-3">
+            <div class="bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Aktif</p>
+                    <p class="text-lg font-bold text-gray-900 leading-none">{{ $totalActive }}</p>
+                </div>
             </div>
-            <div>
-                <h2 class="text-xl font-bold text-gray-900">Penjual Aktif</h2>
-                <p class="text-sm text-gray-600">Total: {{ $activeSellers->count() }} penjual</p>
+            <div class="bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center">
+                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500">Non-Aktif</p>
+                    <p class="text-lg font-bold text-gray-900 leading-none">{{ $totalInactive }}</p>
+                </div>
             </div>
         </div>
     </div>
-    
-    @if($activeSellers->isEmpty())
-    <div class="p-8 text-center text-gray-500">
-        Tidak ada penjual aktif
-    </div>
-    @else
-    <div class="overflow-x-auto">
-        <table class="w-full">
-            <thead class="bg-gray-50 border-b border-gray-200">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Penjual</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Toko</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lokasi</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Bergabung</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-                @foreach($activeSellers as $index => $seller)
-                <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm font-medium text-gray-900">{{ $seller->name }}</div>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ $seller->email }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ $seller->seller->nama_toko ?? '-' }}</td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm text-gray-900">{{ $seller->seller->kabupaten_kota ?? '-' }}</div>
-                        <div class="text-sm text-gray-500">{{ $seller->seller->provinsi ?? '-' }}</div>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ $seller->created_at->format('d/m/Y') }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    @endif
-</div>
 
-<!-- Inactive Sellers -->
-<div class="bg-white rounded-lg border border-gray-200">
-    <div class="p-6 border-b border-gray-200 bg-red-50">
-        <div class="flex items-center gap-3">
-            <div class="bg-red-600 w-12 h-12 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+    <!-- Main Card -->
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+        <!-- Toolbar -->
+        <div class="p-4 border-b border-gray-200 flex flex-col sm:flex-row gap-4 justify-between items-center bg-gray-50/50 rounded-t-xl">
+            <!-- Filter Tabs -->
+            <div class="flex p-1 bg-white border border-gray-200 rounded-lg">
+                <a href="{{ route('admin.reports.seller-accounts', ['filter' => 'all']) }}" 
+                   class="px-4 py-1.5 text-sm font-medium rounded-md transition-all {{ (!isset($filter) || $filter === 'all') ? 'bg-gray-900 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50' }}">
+                    Semua
+                </a>
+                <a href="{{ route('admin.reports.seller-accounts', ['filter' => 'active']) }}" 
+                   class="px-4 py-1.5 text-sm font-medium rounded-md transition-all {{ (isset($filter) && $filter === 'active') ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50' }}">
+                    Aktif
+                </a>
+                <a href="{{ route('admin.reports.seller-accounts', ['filter' => 'inactive']) }}" 
+                   class="px-4 py-1.5 text-sm font-medium rounded-md transition-all {{ (isset($filter) && $filter === 'inactive') ? 'bg-gray-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-50' }}">
+                    Non-Aktif
+                </a>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-3">
+                <a href="{{ route('admin.reports.seller-accounts.pdf', ['filter' => $filter ?? 'all']) }}" target="_blank" 
+                   class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Export PDF
+                </a>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-3 font-medium">No</th>
+                        <th class="px-6 py-3 font-medium">Penjual</th>
+                        <th class="px-6 py-3 font-medium">Toko</th>
+                        <th class="px-6 py-3 font-medium">Lokasi</th>
+                        <th class="px-6 py-3 font-medium">Bergabung</th>
+                        <th class="px-6 py-3 font-medium text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @forelse($sellers as $index => $seller)
+                    <tr class="hover:bg-gray-50 transition-colors">
+                        <td class="px-6 py-4 text-gray-500">{{ ($sellers->currentPage() - 1) * $sellers->perPage() + $index + 1 }}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-gray-900">{{ $seller->name }}</div>
+                            <div class="text-gray-500 text-xs">{{ $seller->email }}</div>
+                        </td>
+                        <td class="px-6 py-4 text-gray-600">{{ $seller->seller->nama_toko ?? '-' }}</td>
+                        <td class="px-6 py-4">
+                            <div class="text-gray-900">{{ $seller->seller->kabupaten_kota ?? '-' }}</div>
+                            <div class="text-gray-500 text-xs">{{ $seller->seller->provinsi ?? '-' }}</div>
+                        </td>
+                        <td class="px-6 py-4 text-gray-600">{{ $seller->created_at->format('d M Y') }}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $seller->status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                                {{ $seller->status === 'active' ? 'Aktif' : 'Non-Aktif' }}
+                            </span>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">Tidak ada data ditemukan</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="px-6 py-4 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2 text-sm text-gray-600">
+                <span>Show</span>
+                <select onchange="window.location.href='{{ route('admin.reports.seller-accounts', ['filter' => $filter]) }}&per_page=' + this.value" class="border-gray-300 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                    <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20</option>
+                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                </select>
+                <span>entries</span>
             </div>
             <div>
-                <h2 class="text-xl font-bold text-gray-900">Penjual Tidak Aktif</h2>
-                <p class="text-sm text-gray-600">Total: {{ $inactiveSellers->count() }} penjual (Pending & Suspended)</p>
+                {{ $sellers->appends(['filter' => $filter, 'per_page' => $perPage])->links() }}
             </div>
         </div>
     </div>
-    
-    @if($inactiveSellers->isEmpty())
-    <div class="p-8 text-center text-gray-500">
-        Tidak ada penjual tidak aktif
-    </div>
-    @else
-    <div class="overflow-x-auto">
-        <table class="w-full">
-            <thead class="bg-gray-50 border-b border-gray-200">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Penjual</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Toko</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Daftar</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-                @foreach($inactiveSellers as $index => $seller)
-                <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm font-medium text-gray-900">{{ $seller->name }}</div>
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ $seller->email }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900">{{ $seller->seller->nama_toko ?? '-' }}</td>
-                    <td class="px-6 py-4">
-                        @if($seller->status === 'pending')
-                            <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-full">Pending</span>
-                        @else
-                            <span class="inline-block px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">Suspended</span>
-                        @endif
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ $seller->created_at->format('d/m/Y') }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    @endif
 </div>
 @endsection

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Laporan Daftar Akun Penjual Berdasarkan Status</title>
+    <title>Laporan Produk Berdasarkan Rating</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -21,10 +21,6 @@
             font-weight: bold;
             text-transform: uppercase;
         }
-        .header .subtitle {
-            margin: 5px 0;
-            font-size: 12pt;
-        }
         .meta-info {
             margin-bottom: 20px;
             font-size: 11pt;
@@ -42,16 +38,10 @@
             font-weight: bold;
             border: 1px solid #000;
         }
-        th.center {
-            text-align: center;
-        }
         td {
             padding: 6px 8px;
             border: 1px solid #000;
             font-size: 11pt;
-        }
-        td.center {
-            text-align: center;
         }
         .footer {
             margin-top: 40px;
@@ -63,22 +53,13 @@
             font-style: italic;
             margin-top: 10px;
         }
-        .badge-danger {
-            background-color: #fee2e2;
-            color: #991b1b;
-        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Laporan Daftar Akun Penjual Berdasarkan Status</h1>
-        @if(isset($filter) && $filter === 'active')
-        <div class="subtitle">(Filter: Penjual Aktif)</div>
-        @elseif(isset($filter) && $filter === 'inactive')
-        <div class="subtitle">(Filter: Penjual Tidak Aktif)</div>
-        @else
-        <div class="subtitle">(Semua Penjual)</div>
-        @endif
+        <h1>Laporan Produk Berdasarkan Rating</h1>
+        <div class="subtitle"><strong>Laporan Produk Berdasarkan Rating</strong></div>
+        <div class="subtitle">Tanggal dibuat: {{ now()->format('d-m-Y') }} oleh {{ auth()->user()->name }}</div>
     </div>
     
     <div class="meta-info">
@@ -86,42 +67,38 @@
         <div>Dibuat Oleh: {{ auth()->user()->name }}</div>
     </div>
 
-    @if($sellers->isEmpty())
-        <p style="text-align: center; color: #666; padding: 15px;">Tidak ada data penjual</p>
+    @if($products->isEmpty())
+        <p style="text-align: center; color: #666; padding: 15px;">Tidak ada data produk dengan rating</p>
     @else
     <table>
         <thead>
             <tr>
-                <th width="5%" class="center">No</th>
-                <th width="20%">Nama Penjual</th>
-                <th width="22%">Email</th>
+                <th width="5%" style="text-align: center;">No</th>
+                <th width="20%">Nama Produk</th>
+                <th width="15%">Kategori</th>
+                <th width="15%" style="text-align: right;">Harga</th>
+                <th width="10%" style="text-align: center;">Rating</th>
                 <th width="20%">Nama Toko</th>
-                <th width="18%">Lokasi</th>
-                <th width="15%" class="center">Status</th>
+                <th width="15%">Propinsi</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($sellers as $index => $seller)
+            @foreach($products as $index => $product)
             <tr>
-                <td class="center">{{ $index + 1 }}</td>
-                <td>{{ $seller->name }}</td>
-                <td>{{ $seller->email }}</td>
-                <td>{{ $seller->seller->nama_toko ?? '-' }}</td>
-                <td>{{ $seller->seller->provinsi ?? '-' }}</td>
-                <td class="center">
-                    @if($seller->status === 'active')
-                    Aktif
-                    @else
-                    Tidak Aktif
-                    @endif
-                </td>
+                <td style="text-align: center;">{{ $index + 1 }}</td>
+                <td>{{ $product->name }}</td>
+                <td>{{ $product->category->name ?? '-' }}</td>
+                <td style="text-align: right;">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                <td style="text-align: center;">{{ number_format($product->avg_rating, 1) }}</td>
+                <td>{{ $product->seller->seller->nama_toko ?? '-' }}</td>
+                <td>{{ $product->seller->seller->provinsi ?? '-' }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
-    <div class="note">***) Data diurutkan berdasarkan status (Aktif kemudian Tidak Aktif)</div>
+    <div class="note">***) Data diurutkan berdasarkan rating tertinggi</div>
     @endif
-    
+
     <div class="footer">
         <p>Dicetak pada: {{ now()->format('d F Y, H:i') }} WIB</p>
     </div>

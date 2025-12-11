@@ -40,11 +40,15 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/sellers/{seller}/suspend', [AdminSellerController::class, 'suspend'])->name('sellers.suspend');
     Route::post('/sellers/{seller}/activate', [AdminSellerController::class, 'activate'])->name('sellers.activate');
 
-    // Reports (SRS-MartPlace-09, 10)
+    // Reports (SRS-MartPlace-09, 10, 11)
     Route::get('/reports/seller-accounts', [App\Http\Controllers\Admin\ReportController::class, 'sellerAccounts'])->name('reports.seller-accounts');
     Route::get('/reports/seller-accounts/pdf', [App\Http\Controllers\Admin\ReportController::class, 'sellerAccountsPdf'])->name('reports.seller-accounts.pdf');
     Route::get('/reports/store-distribution', [App\Http\Controllers\Admin\ReportController::class, 'storeDistribution'])->name('reports.store-distribution');
     Route::get('/reports/store-distribution/pdf', [App\Http\Controllers\Admin\ReportController::class, 'storeDistributionPdf'])->name('reports.store-distribution.pdf');
+
+    // SRS-11: Laporan Produk Berdasarkan Rating
+    Route::get('/reports/rating', [App\Http\Controllers\Admin\ReportController::class, 'productRating'])->name('reports.rating');
+    Route::get('/reports/rating/pdf', [App\Http\Controllers\Admin\ReportController::class, 'productRatingPdf'])->name('reports.rating.pdf');
 });
 
 // Seller Routes
@@ -54,11 +58,7 @@ Route::middleware(['auth', 'role:seller'])->prefix('seller')->name('seller.')->g
     // Product Management (SRS-MartPlace-03)
     Route::resource('products', SellerProductController::class);
 
-    // Reports (SRS-MartPlace-11, 12, 13, 14)
-    // SRS-11: Laporan Produk Berdasarkan Rating
-    Route::get('/reports/rating', [\App\Http\Controllers\Seller\ReportController::class, 'rating'])->name('reports.rating');
-    Route::get('/reports/rating/pdf', [\App\Http\Controllers\Seller\ReportController::class, 'ratingPdf'])->name('reports.rating.pdf');
-
+    // Reports (SRS-MartPlace-12, 13, 14)
     // SRS-12: Laporan Produk Berdasarkan Stock
     Route::get('/reports/stock', [\App\Http\Controllers\Seller\ReportController::class, 'stock'])->name('reports.stock');
     Route::get('/reports/stock/pdf', [\App\Http\Controllers\Seller\ReportController::class, 'stockPdf'])->name('reports.stock.pdf');

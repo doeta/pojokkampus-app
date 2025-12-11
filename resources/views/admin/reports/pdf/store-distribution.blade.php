@@ -2,110 +2,106 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Laporan Daftar Toko Berdasarkan Lokasi Propinsi</title>
+    <title>Laporan Daftar Toko Berdasarkan Lokasi Provinsi</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            font-size: 11px;
-            line-height: 1.4;
-            margin: 20px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            margin: 2cm 2cm 2cm 2cm;
+            color: #000;
         }
         .header {
             text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #000;
+            margin-bottom: 30px;
         }
         .header h1 {
-            margin: 0 0 5px 0;
-            font-size: 16px;
+            margin: 0 0 10px 0;
+            font-size: 14pt;
             font-weight: bold;
-        }
-        .header .subtitle {
-            margin: 3px 0;
-            font-size: 10px;
-            color: #333;
+            text-transform: uppercase;
         }
         .meta-info {
             margin-bottom: 20px;
-            font-size: 10px;
+            font-size: 11pt;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 15px 0;
+            margin: 20px 0;
         }
         th {
-            background-color: #f5f5f5;
-            padding: 6px 8px;
+            background-color: #ffffff;
+            padding: 8px;
             text-align: left;
-            font-size: 10px;
+            font-size: 11pt;
             font-weight: bold;
-            border: 1px solid #999;
+            border: 1px solid #000;
+        }
+        th.center {
+            text-align: center;
         }
         td {
-            padding: 5px 8px;
-            border: 1px solid #999;
-            font-size: 10px;
+            padding: 6px 8px;
+            border: 1px solid #000;
+            font-size: 11pt;
         }
-        tr:nth-child(even) {
-            background-color: #f9fafb;
+        td.center {
+            text-align: center;
         }
         .footer {
-            margin-top: 30px;
+            margin-top: 40px;
             text-align: right;
-            font-size: 9px;
-            color: #666;
+            font-size: 10pt;
         }
         .note {
-            font-size: 9px;
-            color: #666;
+            font-size: 10pt;
             font-style: italic;
-            margin-top: 5px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Format Laporan Bagian Platform (pengelola market place)</h1>
-        <div class="subtitle">(SRS-MartPlace-10)</div>
-        <div class="subtitle"><strong>Laporan Daftar Toko Berdasarkan Lokasi Propinsi</strong></div>
-        <div class="subtitle">Tanggal dibuat: {{ now()->format('d-m-Y') }} oleh {{ auth()->user()->name }}</div>
+        <h1>Laporan Sebaran Toko per Wilayah</h1>
+    </div>
+    
+    <div class="meta-info">
+        <div>Tanggal Dibuat: {{ now()->format('d F Y') }}</div>
+        <div>Dibuat Oleh: {{ auth()->user()->name }}</div>
+        @if($provinsi !== 'all')
+        <div>Filter Provinsi: <strong>{{ $provinsi }}</strong></div>
+        @endif
     </div>
 
-    @if($storesByProvince->isEmpty())
+    @if($stores->isEmpty())
         <p style="text-align: center; color: #666; padding: 15px;">Tidak ada data toko</p>
     @else
     <table>
         <thead>
             <tr>
-                <th width="10%" style="text-align: center;">No</th>
-                <th width="40%">Nama Toko</th>
+                <th width="5%" class="center">No</th>
+                <th width="35%">Nama Toko</th>
                 <th width="30%">Nama PIC</th>
-                <th width="20%">Propinsi</th>
+                <th width="30%">Provinsi</th>
             </tr>
         </thead>
         <tbody>
-            @php
-                $no = 1;
-            @endphp
-            @foreach($storesByProvince as $provinsi => $sellers)
-                @foreach($sellers as $seller)
-                <tr>
-                    <td style="text-align: center;">{{ $no++ }}</td>
-                    <td>{{ $seller->nama_toko }}</td>
-                    <td>{{ $seller->nama_pic }}</td>
-                    <td>{{ $seller->provinsi }}</td>
-                </tr>
-                @endforeach
+            @foreach($stores as $index => $store)
+            <tr>
+                <td class="center">{{ $index + 1 }}</td>
+                <td>{{ $store->nama_toko }}</td>
+                <td>{{ $store->nama_pic }}</td>
+                <td>{{ $store->provinsi }}</td>
+            </tr>
             @endforeach
         </tbody>
     </table>
-    <div class="note">***) urutkan berdasarkan propinsi</div>
+    <div class="note">***) Data diurutkan berdasarkan provinsi</div>
     @endif
-
+    
     <div class="footer">
-        <p>Dicetak pada: {{ now()->format('d F Y H:i') }} WIB</p>
+        <p>Dicetak pada: {{ now()->format('d F Y, H:i') }} WIB</p>
     </div>
 </body>
 </html>

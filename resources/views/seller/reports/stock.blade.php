@@ -4,7 +4,7 @@
 <div class="mb-8 flex items-center justify-between">
     <div>
         <h1 class="text-3xl font-bold text-gray-900">Laporan Daftar Produk Berdasarkan Stock</h1>
-        <p class="text-gray-600 mt-1">SRS-MartPlace-12 - Diurutkan berdasarkan stock tertinggi</p>
+        <p class="text-gray-600 mt-1">Diurutkan berdasarkan stock tertinggi</p>
     </div>
     <a href="{{ route('seller.reports.stock.pdf') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,11 +52,11 @@
             <thead class="bg-gray-50 border-b border-gray-200">
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produk</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Produk</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Stok</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -82,13 +82,10 @@
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4">
-                        <span class="inline-block px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
-                            {{ $product->category->name ?? 'Tanpa Kategori' }}
+                    <td class="px-6 py-4 text-center">
+                        <span class="text-lg font-bold {{ $product->stock == 0 ? 'text-red-600' : ($product->stock < 2 ? 'text-orange-600' : 'text-gray-900') }}">
+                            {{ $product->stock }}
                         </span>
-                    </td>
-                    <td class="px-6 py-4 text-right">
-                        <span class="text-sm font-bold text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
                     </td>
                     <td class="px-6 py-4 text-center">
                         <div class="flex items-center justify-center gap-1">
@@ -99,10 +96,13 @@
                             <span class="text-xs text-gray-500">({{ $product->total_reviews }})</span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-center">
-                        <span class="text-lg font-bold {{ $product->stock == 0 ? 'text-red-600' : ($product->stock < 2 ? 'text-orange-600' : 'text-gray-900') }}">
-                            {{ $product->stock }}
+                    <td class="px-6 py-4">
+                        <span class="inline-block px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
+                            {{ $product->category->name ?? 'Tanpa Kategori' }}
                         </span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <span class="text-sm font-bold text-gray-900">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
                     </td>
                 </tr>
                 @endforeach

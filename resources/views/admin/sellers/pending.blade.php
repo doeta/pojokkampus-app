@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">Menunggu Verifikasi</h1>
-    <p class="text-gray-600 mt-1">Daftar calon penjual yang menunggu verifikasi (SRS-MartPlace-02)</p>
+    <h1 class="text-3xl font-bold text-gray-900">Penjual Menunggu Verifikasi</h1>
+    <p class="text-gray-600 mt-1">Daftar calon penjual yang menunggu verifikasi</p>
 </div>
 
 @if($sellers->isEmpty())
