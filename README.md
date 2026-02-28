@@ -8,6 +8,7 @@ Platform marketplace untuk mahasiswa menjual dan membeli produk second dan new. 
 -   [Tech Stack](#tech-stack)
 -   [Requirements](#requirements)
 -   [Installation](#installation)
+-   [Docker Installation](#docker-installation)
 -   [Seeding Data](#seeding-data)
 -   [Account Testing](#account-testing)
 -   [Troubleshooting](#troubleshooting)
@@ -141,6 +142,84 @@ php artisan serve
 ```
 
 Akses aplikasi di: http://127.0.0.1:8000
+
+## Docker Installation
+
+Alternatif menggunakan Docker untuk setup yang lebih mudah:
+
+### Prerequisites
+
+-   Docker Desktop (Windows/Mac) atau Docker Engine (Linux)
+-   Docker Compose
+
+### 1. Clone dan Setup Environment
+
+```bash
+git clone https://github.com/doeta/Tubes-PPL.git
+cd Tubes-PPL
+cp .env.docker .env
+```
+
+### 2. Build dan Start Containers
+
+```bash
+docker-compose up -d --build
+```
+
+Proses ini akan:
+-   Build image PHP dengan semua dependencies
+-   Start MySQL database
+-   Start phpMyAdmin (opsional)
+-   Start Mailhog untuk email testing
+-   Menjalankan migrations otomatis
+
+### 3. Access Application
+
+-   **Aplikasi**: http://localhost:8000
+-   **phpMyAdmin**: http://localhost:8080
+-   **Mailhog (Email)**: http://localhost:8025
+
+### 4. Seed Data (Optional)
+
+```bash
+docker-compose exec app php artisan db:seed --class=CategorySeeder
+docker-compose exec app php artisan db:seed --class=AdminSeeder
+docker-compose exec app php artisan db:seed --class=TestSellerSeeder
+docker-compose exec app php artisan db:seed --class=ProductWithImagesSeeder
+docker-compose exec app php artisan db:seed --class=ReviewSeeder
+```
+
+Atau seed semua sekaligus:
+
+```bash
+docker-compose exec app php artisan migrate:fresh --seed
+```
+
+### Docker Commands
+
+```bash
+# Start containers
+docker-compose up -d
+
+# Stop containers
+docker-compose down
+
+# View logs
+docker-compose logs -f app
+
+# Access app shell
+docker-compose exec app bash
+
+# Run artisan commands
+docker-compose exec app php artisan <command>
+
+# Rebuild after changes
+docker-compose up -d --build
+
+# Reset everything (including database)
+docker-compose down -v
+docker-compose up -d --build
+```
 
 ## Seeding Data
 

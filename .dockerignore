@@ -1,0 +1,59 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies (will be installed in container)
+/node_modules
+/vendor
+
+# Build artifacts
+/public/hot
+/public/build
+
+# Environment (will be set via docker-compose)
+.env
+.env.backup
+.env.local
+.env.*.local
+
+# Storage (mounted as volume)
+/storage/*.key
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# Logs
+*.log
+/storage/logs/*
+
+# Testing
+.phpunit.result.cache
+phpunit.xml.bak
+/coverage
+
+# Documentation
+README.md
+SETUP.md
+MyCommit.md
+/docs
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
