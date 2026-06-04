@@ -6,7 +6,6 @@ use App\Notifications\SellerVerificationNotification;
 use Illuminate\Support\Facades\Notification;
 
 test('admin can approve seller registration and send notification', function () {
-    // Fake the notification system
     Notification::fake();
 
     // Create an admin user (role = 'admin')
@@ -15,13 +14,13 @@ test('admin can approve seller registration and send notification', function () 
         'status' => 'active',
     ]);
 
-    // Create a pending seller user
+
     $sellerUser = User::factory()->create([
         'role' => 'seller',
         'status' => 'pending',
     ]);
 
-    // Create a pending seller record associated with the user
+
     $seller = Seller::create([
         'user_id' => $sellerUser->id,
         'nama_toko' => 'Test Store',
@@ -39,19 +38,18 @@ test('admin can approve seller registration and send notification', function () 
         'verification_status' => 'pending',
     ]);
 
-    // Authenticate as admin and send the approve request via POST
+
     $response = $this->actingAs($admin)->post(route('admin.sellers.approve', $sellerUser));
 
-    // Assert the response redirects back
     $response->assertRedirect();
     $response->assertSessionHas('success');
 
-    // Assert that the notification was sent to the seller user
+
     Notification::assertSentTo(
         [$sellerUser], SellerVerificationNotification::class
     );
 
-    // Refresh the models and assert the changes
+
     $seller->refresh();
     $sellerUser->refresh();
 
