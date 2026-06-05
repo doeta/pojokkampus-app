@@ -40,16 +40,16 @@ if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force
 fi
 
-# Clear and cache config
-echo "Clearing caches..."
-php artisan config:clear
-php artisan cache:clear
-php artisan view:clear
-php artisan route:clear
-
 # Run migrations
 echo "Running migrations..."
 php artisan migrate --force
+
+# Clear and cache config
+echo "Clearing caches..."
+php artisan config:clear || true
+php artisan cache:clear || true
+php artisan view:clear || true
+php artisan route:clear || true
 
 # Create storage link
 echo "Creating storage link..."
