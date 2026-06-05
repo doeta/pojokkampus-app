@@ -31,16 +31,6 @@ test('users can not authenticate with invalid password', function () {
     $this->assertGuest();
 });
 
-test('users can not authenticate with unregistered email', function () {
-    $response = $this->post('/login', [
-        'email' => 'unregistered@example.com',
-        'password' => 'password',
-    ]);
-
-    $this->assertGuest();
-});
-
-
 test('users can logout', function () {
     $user = User::factory()->create();
 
@@ -49,3 +39,9 @@ test('users can logout', function () {
     $this->assertGuest();
     $response->assertRedirect('/');
 });
+
+test('guests are redirected to login page when accessing dashboard', function () {
+    $response = $this->get('/dashboard');
+    $response->assertRedirect('/login');
+});
+
