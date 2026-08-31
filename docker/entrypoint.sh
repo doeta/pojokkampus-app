@@ -55,6 +55,30 @@ php artisan route:clear || true
 echo "Creating storage link..."
 php artisan storage:link --force 2>/dev/null || true
 
+# Auto-seed essential test data if database is fresh
+echo "Checking database status..."
+NEED_SEED=$(php -r "
+    try {
+        require '/var/www/html/vendor/autoload.php';
+        \$app = require_once '/var/www/html/bootstrap/app.php';
+        \$kernel = \$app->make(Illuminate\Contracts\Console\Kernel::class);
+        \$kernel->bootstrap();
+        echo \App\Models\Category::count() == 0 ? 'yes' : 'no';
+    } catch (\Throwable \$e) {
+        echo 'no';
+    }
+" 2>/dev/null || echo "no")
+
+if [ "$NEED_SEED" = "yes" ]; then
+    echo "Fresh database detected. Auto-seeding initial data..."
+    php artisan db:seed --class=AdminSeeder --force || true
+    php artisan db:seed --class=PlatformUserSeeder --force || true
+    php artisan db:seed --class=CategorySeeder --force || true
+    php artisan db:seed --class=TestSellerSeeder --force || true
+    php artisan db:seed --class=ProductSeeder --force || true
+    echo "Initial data seeded successfully!"
+fi
+
 # Cache config for production
 if [ "$APP_ENV" = "production" ]; then
     echo "Caching configuration for production..."

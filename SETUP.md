@@ -2,12 +2,30 @@
 
 Panduan cepat untuk setup project ini di komputer lokal.
 
-## ⚡ Quick Start (5 Menit)
+## 🐳 1-Click Docker Quick Start (Rekomendasi)
+
+Tinggal clone dan jalankan script starter (tidak perlu install PHP, Composer, Node, atau MySQL di laptop):
+
+### Windows:
+1. Clone repo: `git clone git@github.com:doeta/pojokkampus-app.git` (atau HTTPS)
+2. Masuk folder `pojokkampus-app`
+3. Double click file **`start.bat`** (atau jalankan `start.bat` di terminal)
+
+### macOS / Linux:
+1. Clone repo: `git clone git@github.com:doeta/pojokkampus-app.git`
+2. `cd pojokkampus-app`
+3. Jalankan **`./start.sh`**
+
+Script akan otomatis membuat `.env`, membuild docker image, menjalankan migrasi database, menyuntikkan seed data pengujian, dan membuka **http://localhost:8000** di browser!
+
+---
+
+## ⚡ Manual Local Setup (Tanpa Docker)
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/doeta/Tubes-PPL.git
-cd Tubes-PPL
+git clone git@github.com:doeta/pojokkampus-app.git
+cd pojokkampus-app
 
 # 2. Install dependencies
 composer install && npm install

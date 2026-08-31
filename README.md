@@ -143,82 +143,88 @@ php artisan serve
 
 Akses aplikasi di: http://127.0.0.1:8000
 
-## Docker Installation
+## Docker Installation (1-Click Setup)
 
-Alternatif menggunakan Docker untuk setup yang lebih mudah:
+Menjalankan project menggunakan Docker tanpa perlu install PHP, Composer, Node.js, atau MySQL di laptop Anda:
 
 ### Prerequisites
 
--   Docker Desktop (Windows/Mac) atau Docker Engine (Linux)
--   Docker Compose
+-   [Docker Desktop](https://www.docker.com/products/docker-desktop/) (Windows / macOS) atau Docker Engine (Linux)
 
-### 1. Clone dan Setup Environment
+### 🚀 Cara 1: 1-Click Startup (Paling Mudah)
 
-```bash
-git clone https://github.com/doeta/Tubes-PPL.git
-cd Tubes-PPL
-cp .env.docker .env
-```
+1. **Clone repository:**
+   ```bash
+   git clone git@github.com:doeta/pojokkampus-app.git
+   cd pojokkampus-app
+   ```
 
-### 2. Build dan Start Containers
+2. **Jalankan script starter:**
+   - **Windows:** Double click file `start.bat` (atau jalankan `start.bat` di command prompt)
+   - **macOS / Linux:** Jalankan `./start.sh`
 
-```bash
-docker-compose up -d --build
-```
+Script akan otomatis:
+- Menyiapkan environment (`.env`)
+- Membuild container Docker untuk PHP, Nginx, MySQL, phpMyAdmin, dan Mailhog
+- Menjalankan migrasi database
+- Mengisi data awal (Admin, Seller, Kategori) secara otomatis jika database baru
+- Membuka browser ke `http://localhost:8000`
 
-Proses ini akan:
--   Build image PHP dengan semua dependencies
--   Start MySQL database
--   Start phpMyAdmin (opsional)
--   Start Mailhog untuk email testing
--   Menjalankan migrations otomatis
+3. **1-Click Stop / Seed Script:**
+   - Hentikan container: jalankan `stop.bat` (Windows) atau `./stop.sh` (Mac/Linux)
+   - Reseed data produk & dummy: jalankan `seed.bat` (Windows) atau `./seed.sh` (Mac/Linux)
 
-### 3. Access Application
+---
 
--   **Aplikasi**: http://localhost:8000
--   **phpMyAdmin**: http://localhost:8080
--   **Mailhog (Email)**: http://localhost:8025
+### 💻 Cara 2: Menggunakan Terminal / Docker Compose
 
-### 4. Seed Data (Optional)
+1. **Clone repository:**
+   ```bash
+   git clone git@github.com:doeta/pojokkampus-app.git
+   cd pojokkampus-app
+   cp .env.docker .env
+   ```
 
-```bash
-docker-compose exec app php artisan db:seed --class=CategorySeeder
-docker-compose exec app php artisan db:seed --class=AdminSeeder
-docker-compose exec app php artisan db:seed --class=TestSellerSeeder
-docker-compose exec app php artisan db:seed --class=ProductWithImagesSeeder
-docker-compose exec app php artisan db:seed --class=ReviewSeeder
-```
+2. **Build dan jalankan container:**
+   ```bash
+   docker compose up -d --build
+   ```
 
-Atau seed semua sekaligus:
+### 🌐 Akses Layanan
 
-```bash
-docker-compose exec app php artisan migrate:fresh --seed
-```
+-   **Aplikasi Utama**: [http://localhost:8000](http://localhost:8000)
+-   **phpMyAdmin**: [http://localhost:8080](http://localhost:8080)
+-   **Mailhog (Email Inbox)**: [http://localhost:8025](http://localhost:8025)
 
-### Docker Commands
+### 🔑 Akun Bawaan (Default Credentials)
+
+-   **Admin**: `admin@admin.com` / `admin123`
+-   **Seller**: `seller@test.com` / `seller123`
+
+### 🛠️ Docker Commands Berguna
 
 ```bash
 # Start containers
-docker-compose up -d
+docker compose up -d
 
 # Stop containers
-docker-compose down
+docker compose down
 
-# View logs
-docker-compose logs -f app
+# View live logs
+docker compose logs -f app
 
-# Access app shell
-docker-compose exec app bash
+# Akses bash di dalam container app
+docker compose exec app bash
 
-# Run artisan commands
-docker-compose exec app php artisan <command>
+# Jalankan perintah artisan
+docker compose exec app php artisan <command>
 
-# Rebuild after changes
-docker-compose up -d --build
+# Reseed database lengkap dengan gambar placeholder
+docker compose exec app php artisan db:seed --class=ProductWithImagesSeeder
+docker compose exec app php artisan db:seed --class=ReviewSeeder
 
-# Reset everything (including database)
-docker-compose down -v
-docker-compose up -d --build
+# Reset total database & data
+docker compose exec app php artisan migrate:fresh --seed
 ```
 
 ## Seeding Data

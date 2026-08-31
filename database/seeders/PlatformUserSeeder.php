@@ -14,13 +14,15 @@ class PlatformUserSeeder extends Seeder
     public function run(): void
     {
         // Create platform admin user
-        User::create([
-            'name' => 'Platform Admin',
-            'email' => 'admin@marketplace.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'status' => 'active',
-            'email_verified_at' => now(),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@marketplace.com'],
+            [
+                'name' => 'Platform Admin',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'status' => 'active',
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }
